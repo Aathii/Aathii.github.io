@@ -1,7 +1,7 @@
 ---
 import Icon from '../ui/Icon.astro';
 import ProjectRow from './ProjectRow.astro';
-import { moreWork, projects } from '../../data/content';
+import { moreWork, projects, systemsWork } from '../../data/content';
 ---
 
 <section id="work" class="section" aria-labelledby="work-title" data-inert-when-menu>
@@ -10,13 +10,32 @@ import { moreWork, projects } from '../../data/content';
 			<h2 id="work-title" class="h-section" data-reveal>Selected <b>work</b><span class="dot">.</span></h2>
 			<span class="rule" data-reveal="rule" aria-hidden="true"></span>
 			<p data-reveal style="--reveal-delay:300ms">
-				A product I'm building, a tool I made for my own sales job, the company I co-founded, and websites for small
-				businesses. Hover a screenshot to scroll through the real site.
+				An app I'm building, automation I made for my own sales job, the company I co-founded, websites for small
+				businesses, and some systems work. Hover a screenshot to scroll through the real site.
 			</p>
 		</div>
 
 		<div class="projects">
 			{projects.map((project, i) => <ProjectRow project={project} index={i} />)}
+		</div>
+
+		<div class="systems">
+			<h3 class="h-sub systems-title" data-reveal>Systems <b>&amp; languages</b><span class="dot">.</span></h3>
+			<ul class="systems-list">
+				{
+					systemsWork.map((item) => (
+						<li class="system" data-reveal>
+							<div>
+								<h4 class="system-name">{item.title}</h4>
+								<p class="system-stack">{item.stack}</p>
+							</div>
+							<ul class="system-points">
+								{item.points.map((point) => <li>{point}</li>)}
+							</ul>
+						</li>
+					))
+				}
+			</ul>
 		</div>
 
 		<div class="more">
@@ -44,6 +63,73 @@ import { moreWork, projects } from '../../data/content';
 <style>
 	.projects {
 		margin-top: clamp(3.5rem, 7vw, 5.5rem);
+	}
+
+	/* ---------- Systems & languages: text rows, same grid as Experience ---------- */
+	.systems {
+		margin-top: clamp(4.5rem, 9vw, 7rem);
+	}
+
+	.systems-title {
+		margin-bottom: 1.75rem;
+	}
+
+	.systems-title b {
+		font-weight: 700;
+	}
+
+	.systems-list {
+		border-top: 1px solid var(--color-hair);
+	}
+
+	.system {
+		display: grid;
+		gap: 0.9rem;
+		padding-block: 2rem;
+		border-bottom: 1px solid var(--color-hair);
+	}
+
+	@media (min-width: 900px) {
+		.system {
+			grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+			gap: clamp(3rem, 6vw, 5.5rem);
+		}
+	}
+
+	.system-name {
+		font-size: clamp(1.4rem, 1vw + 1.05rem, 1.75rem);
+		font-weight: 700;
+		line-height: 1.15;
+	}
+
+	.system-stack {
+		margin-top: 0.4rem;
+		font-size: 0.95rem;
+		color: var(--color-line);
+		font-weight: 600;
+	}
+
+	.system-points {
+		display: grid;
+		gap: 0.6rem;
+		max-width: 38rem;
+	}
+
+	.system-points li {
+		position: relative;
+		padding-left: 1.4rem;
+	}
+
+	.system-points li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.72em;
+		width: 0.45rem;
+		height: 0.45rem;
+		border-radius: 999px;
+		background: var(--color-fill);
+		box-shadow: inset 0 0 0 1.5px var(--color-line);
 	}
 
 	.more {

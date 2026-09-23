@@ -1,16 +1,18 @@
 /**
- * Portfolio content. Every claim is backed by something checkable: a live site, a repo, the diploma,
- * or something Aathii confirmed directly (Membership Advisor at Fitness Connection, co-founder of
- * EverSeasons Co, degree focus). No dates by request; add them to `experience` if wanted later.
+ * Portfolio content. The source of truth is Aathii's résumé (public/Aathii_Rakurakavan_Resume.pdf), plus what
+ * Aathii confirmed directly (co-founder of EverSeasons Co) and what the live sites and repos show.
+ * Keep this file and the résumé in step: never add a role, date, metric or claim that isn't in one of them.
  */
 
 export interface Project {
 	slug: string;
 	title: string;
-	/** Short label above the title, e.g. "iPhone app · Live". */
+	/** Short label above the title, e.g. "iOS app · TestFlight". */
 	kind: string;
 	/** One or two sentences: what it is and what I did. */
 	summary: string;
+	/** Optional engineering highlights shown as a short list. */
+	highlights?: string[];
 	role: string;
 	tags: string[];
 	/** Live site (opens in a new tab). */
@@ -31,11 +33,17 @@ export const projects: Project[] = [
 	{
 		slug: 'irl',
 		title: 'IRL',
-		kind: 'iPhone app · Live',
+		kind: 'AI fitness & nutrition app for iPhone',
 		summary:
-			'A fitness app that brings food, training, activity and progress together. Food logging with barcode search, set-by-set training plans, coaching, and a 12-week AI projection of your goal. One FastAPI backend serves the web app and the native iPhone app.',
+			'A full-stack iOS app: an Expo / React Native client against a Python FastAPI backend on Render with SQLite storage, built and shipped to TestFlight through Expo Application Services. Google Gemini powers meal scanning, personalized coaching and image generation.',
+		highlights: [
+			'On-device progress-photo identity checks with OpenCV (YuNet + ORB) instead of a third-party service.',
+			'Apple and Google Sign-In, JWT sessions, PBKDF2 password hashing and password-reset email.',
+			'HealthKit, camera, photo library and push notifications, with subscriptions through RevenueCat.',
+			'Nutrition data unified from USDA FoodData Central, Open Food Facts and FatSecret; a 119-test pytest suite.',
+		],
 		role: 'Creator and lead developer',
-		tags: ['React Native', 'Expo', 'FastAPI', 'Next.js', 'OpenAI API'],
+		tags: ['React Native', 'Expo', 'Python', 'FastAPI', 'SQLite', 'Google Gemini'],
 		liveUrl: 'https://makeitirl.ca',
 		liveLabel: 'Visit makeitirl.ca',
 		image: '/projects/irl-tall.webp',
@@ -43,12 +51,12 @@ export const projects: Project[] = [
 	},
 	{
 		slug: 'follow-up-assistant',
-		title: 'Follow-up Assistant',
-		kind: 'AI tool · Built for my sales role',
+		title: 'CRM Follow-up Automation',
+		kind: 'Automation · Built for my sales job',
 		summary:
-			'An assistant I built for my own job as a membership advisor. It drafts personal follow-up messages for new leads and current members, then automates the SMS, email, notes and next follow-up tasks in the CRM.',
+			'A workflow on the GleanTap CRM API that drafts follow-up messages, logs texts, emails and notes automatically, and completes routine follow-up tasks. It saves several hours of manual data entry a week and cut my daily workflow down to phone calls.',
 		role: 'Designer and developer',
-		tags: ['Python', 'Streamlit', 'OpenAI API', 'Gleantap CRM'],
+		tags: ['Python', 'Streamlit', 'OpenAI API', 'GleanTap API'],
 		repoUrl: 'https://github.com/Aathii/CRMAUTOGLEAN',
 		illustration: 'assistant',
 	},
@@ -94,6 +102,32 @@ export const projects: Project[] = [
 	},
 ];
 
+export interface SystemsProject {
+	title: string;
+	stack: string;
+	points: string[];
+}
+
+/** Lower-level work from the résumé (no public code). */
+export const systemsWork: SystemsProject[] = [
+	{
+		title: 'Linux system shell',
+		stack: 'C · Sockets · GDB',
+		points: [
+			'A working Unix shell (mysh) in C with core utilities (ls, cd, cat, wc), fork/exec process management, background jobs and signal handling.',
+			'Client–server communication over TCP/UDP sockets, with zero memory leaks verified using AddressSanitizer and GDB.',
+		],
+	},
+	{
+		title: 'Functional language interpreter & desugarer',
+		stack: 'Haskell · Racket',
+		points: [
+			'An interpreter for Orange, a functional language: abstract syntax tree, eager evaluation, environment-based lookup, closures and structured error propagation.',
+			'A structural-recursion desugarer in Racket that translates high-level syntax into a core language, including n-ary calls and deeply nested pattern matching.',
+		],
+	},
+];
+
 export interface MoreWork {
 	title: string;
 	note: string;
@@ -122,18 +156,27 @@ export interface Role {
 	org: string;
 	/** Optional link for the organisation. */
 	orgUrl?: string;
+	location?: string;
+	/** From the résumé. Left empty where the résumé has no dates. */
+	period?: string;
+	/** Small line under the title, e.g. "Promoted from Sales Specialist". */
+	note?: string;
 	current?: boolean;
 	points: string[];
 }
 
 export const experience: Role[] = [
 	{
-		title: 'Membership Advisor',
+		title: 'Sales Lead',
 		org: 'Fitness Connection',
+		location: 'Richmond Hill, ON',
+		period: 'May 2025 – Present',
+		note: 'Promoted from Sales Specialist',
 		current: true,
 		points: [
-			'Sales: walk prospective members through the club, learn their goals and help them choose the right membership.',
-			'Follow up with new leads and current members, and built an AI assistant to automate that follow-up.',
+			'Top-performing sales representative at the location; I own the full membership sales cycle, from first inquiry to close.',
+			'Built an automated workflow on the GleanTap CRM API that logs texts, emails and notes and completes routine follow-ups, saving several hours of data entry a week.',
+			'Work across three CRMs (GleanTap, Antaris and Less Annoying CRM), reconciling lead, appointment and conversion records and resolving member account and billing issues.',
 		],
 	},
 	{
@@ -146,23 +189,28 @@ export const experience: Role[] = [
 		],
 	},
 	{
-		title: 'Creator and lead developer',
-		org: 'IRL',
-		orgUrl: 'https://makeitirl.ca',
-		points: ['A fitness app for iPhone, live at makeitirl.ca, with a web app and a shared API.'],
-	},
-	{
 		title: 'Founder',
 		org: 'Elevate Digital',
 		orgUrl: 'https://aathii.github.io/ElevateWebDesign/',
 		points: ['Web design studio: I design and build websites for small businesses.'],
+	},
+	{
+		title: 'Event Support Lead',
+		org: 'DUA Events, University of Toronto',
+		location: 'Toronto, ON',
+		period: 'May 2023 – Jun 2025',
+		points: [
+			'Coordinated logistics, setup, teardown and live issue resolution across teams for campus events on tight timelines.',
+			'Troubleshot A/V and operational failures and kept staff, vendors and attendees updated as priorities shifted.',
+		],
 	},
 ];
 
 export const education = {
 	degree: 'Honours Bachelor of Science',
 	school: 'University of Toronto',
-	focus: 'Technology and coding, computer science, and math.',
+	period: 'Sept 2021 – Apr 2026',
+	program: 'Technology, Coding & Society, with a double minor in Computer Science and Mathematics.',
 };
 
 export interface SkillGroup {
@@ -170,24 +218,27 @@ export interface SkillGroup {
 	items: string[];
 }
 
-/** Every entry is evidenced by a repo, a live site or the sales role. */
+/** From the résumé, plus the web tools the featured client sites are built with. */
 export const skills: SkillGroup[] = [
-	{ label: 'Languages', items: ['Python', 'TypeScript', 'JavaScript', 'HTML & CSS'] },
-	{ label: 'Frameworks', items: ['React', 'React Native (Expo)', 'Next.js', 'Astro', 'Tailwind CSS', 'FastAPI', 'Streamlit'] },
-	{ label: 'AI', items: ['OpenAI API', 'LLM-powered features and automation'] },
-	{ label: 'Design', items: ['UI design', 'Responsive layouts', 'Motion'] },
-	{ label: 'Business', items: ['Membership sales', 'Lead follow-up', 'CRM automation (Gleantap)', 'Running a small business'] },
+	{ label: 'Languages', items: ['Python', 'JavaScript', 'TypeScript', 'C', 'Java', 'SQL', 'Haskell', 'Racket', 'Bash'] },
+	{ label: 'Mobile & web', items: ['React Native', 'React', 'Expo', 'React Navigation', 'FastAPI', 'Pydantic', 'Astro', 'Tailwind CSS'] },
+	{ label: 'AI & computer vision', items: ['Google Gemini API', 'OpenAI SDK', 'OpenCV (YuNet, ORB)', 'Image-generation pipelines'] },
+	{ label: 'Backend & data', items: ['REST API design', 'SQLite', 'JWT / OAuth authentication', 'Third-party API integration'] },
+	{ label: 'Infrastructure', items: ['Render', 'Linux / Unix', 'Expo Application Services (EAS)', 'Excel automation'] },
+	{ label: 'Developer tools', items: ['Git', 'Claude Code', 'OpenAI Codex', 'pytest', 'ESLint', 'GDB', 'AddressSanitizer'] },
+	{ label: 'Business', items: ['Full-cycle membership sales', 'CRM automation', 'GleanTap, Antaris, Less Annoying CRM', 'Event operations'] },
+	{ label: 'Spoken', items: ['English', 'French', 'Tamil'] },
 ];
 
 export const aboutParagraphs = [
-	'I work in sales as a membership advisor at Fitness Connection. Alongside that I build: IRL, a fitness app for iPhone; websites for small businesses through my studio, Elevate Digital; and EverSeasons Co, the home-maintenance company I co-founded.',
-	'Selling face to face shapes how I build: start with what the customer actually needs, then write the code. It is also why I built an AI assistant to automate my own sales follow-ups.',
-	'I studied technology and coding, computer science and math at the University of Toronto, where I earned an Honours Bachelor of Science.',
+	"I'm a University of Toronto graduate (Honours B.Sc. in Technology, Coding & Society, with minors in computer science and math) building IRL, a full-stack AI fitness app for iPhone. My background runs from C, Haskell and Racket to React Native and FastAPI.",
+	"I'm also a Sales Lead at Fitness Connection, promoted from Sales Specialist, where I own the membership sales cycle from first inquiry to close. Selling face to face shapes how I build: start with what the customer needs, then write the code. It's also why I automated my own CRM follow-ups.",
+	'Outside that, I co-founded EverSeasons Co, a student-run home-maintenance company, and design websites for small businesses through Elevate Digital. I speak English, French and Tamil.',
 ];
 
 /** The three short "what I do" rows in the About section. */
 export const pillars = [
-	{ icon: 'build', label: 'Build', text: 'IRL, a fitness app for iPhone, plus websites for small businesses.' },
-	{ icon: 'sell', label: 'Sell', text: 'Membership advisor at Fitness Connection.' },
+	{ icon: 'build', label: 'Build', text: 'IRL, an AI fitness app for iPhone, plus websites for small businesses.' },
+	{ icon: 'sell', label: 'Sell', text: 'Sales Lead at Fitness Connection and the top-performing rep at my location.' },
 	{ icon: 'start', label: 'Start', text: 'Co-founder of EverSeasons Co and founder of Elevate Digital.' },
 ] as const;

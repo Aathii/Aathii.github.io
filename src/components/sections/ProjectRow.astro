@@ -78,6 +78,13 @@ const smallImage = project.image?.replace(/\.webp$/, '-720.webp');
 			{project.title}<span class="dot">.</span>
 		</h3>
 		<p class="project-summary" data-reveal style="--reveal-delay:120ms">{project.summary}</p>
+		{
+			project.highlights && (
+				<ul class="project-highlights" data-reveal style="--reveal-delay:160ms">
+					{project.highlights.map((h) => <li>{h}</li>)}
+				</ul>
+			)
+		}
 		<dl class="project-meta" data-reveal style="--reveal-delay:200ms">
 			<div>
 				<dt>Role</dt>
@@ -270,6 +277,31 @@ const smallImage = project.image?.replace(/\.webp$/, '-720.webp');
 	.project-summary {
 		max-width: 36rem;
 		margin-top: 1.1rem;
+	}
+
+	.project-highlights {
+		display: grid;
+		gap: 0.45rem;
+		max-width: 36rem;
+		margin-top: 1rem;
+		font-size: 0.95rem;
+	}
+
+	.project-highlights li {
+		position: relative;
+		padding-left: 1.3rem;
+	}
+
+	.project-highlights li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.7em;
+		width: 0.42rem;
+		height: 0.42rem;
+		border-radius: 999px;
+		background: var(--color-fill);
+		box-shadow: inset 0 0 0 1.5px var(--color-line);
 	}
 
 	.project-meta {

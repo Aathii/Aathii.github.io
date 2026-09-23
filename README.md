@@ -19,14 +19,15 @@ npm run check      # type-check
 | Projects, experience, education, toolkit, about copy | `src/data/content.ts` |
 | Colours, fonts, motion curves | `@theme` block in `src/styles/global.css` |
 
-The résumé buttons appear automatically once `resumeUrl` is set.
+The résumé lives at `public/Aathii_Rakurakavan_Resume.pdf` and is linked from the header, hero, menu and contact
+section. To update it, replace that file (same name) and push. **Keep `content.ts` in step with the résumé**: the
+site's roles, dates and claims are taken from it.
 
 ## Next steps
 
-1. **Résumé** — put the PDF in `public/` and set `resumeUrl: '/resume.pdf'` in `site.ts`.
-2. **Dates** — roles are shown without dates by choice. Add them to `experience` in `content.ts` if you want them later.
-3. **Custom domain** (optional) — set `site` in `astro.config.mjs` and add the domain under Settings → Pages.
-4. `www.makeitirl.ca` returns a 404 while `makeitirl.ca` works. Add the `www` record in Cloudflare so both resolve.
+1. **Custom domain** (optional) — set `site` in `astro.config.mjs` and add the domain under Settings → Pages.
+2. `www.makeitirl.ca` returns a 404 while `makeitirl.ca` works. Add the `www` record in Cloudflare so both resolve.
+3. The public résumé PDF includes a phone number. Swap in a copy without it if you'd rather not publish it.
 
 The site is public and indexable (`live: true` in `site.ts`; set it to `false` to hide it from search engines).
 The portrait was cropped with `node tools/process-photo.mjs <photo> 185,0,717,896` (x,y,width,height of the framing).

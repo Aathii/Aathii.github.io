@@ -14,6 +14,7 @@ import { education, experience } from '../../data/content';
 				experience.map((role) => (
 					<li class="role" data-reveal>
 						<div class="role-head">
+							{role.period && <p class="label edu-label">{role.period}</p>}
 							<h3 class="role-title">{role.title}</h3>
 							<p class="role-org">
 								{role.orgUrl ? (
@@ -25,6 +26,9 @@ import { education, experience } from '../../data/content';
 								)}
 								{role.current && <span class="now">Current</span>}
 							</p>
+							{(role.note || role.location) && (
+								<p class="role-meta">{[role.note, role.location].filter(Boolean).join(' · ')}</p>
+							)}
 						</div>
 						<ul class="role-points">
 							{role.points.map((point) => <li>{point}</li>)}
@@ -34,12 +38,12 @@ import { education, experience } from '../../data/content';
 			}
 			<li class="role" data-reveal>
 				<div class="role-head">
-					<p class="label edu-label">Education</p>
+					<p class="label edu-label">Education · {education.period}</p>
 					<h3 class="role-title">{education.degree}</h3>
 					<p class="role-org"><span>{education.school}</span></p>
 				</div>
 				<ul class="role-points">
-					<li>{education.focus}</li>
+					<li>{education.program}</li>
 				</ul>
 			</li>
 		</ol>
@@ -86,6 +90,12 @@ import { education, experience } from '../../data/content';
 		margin-top: 0.4rem;
 		font-size: 1.05rem;
 		color: var(--color-ink);
+	}
+
+	.role-meta {
+		margin-top: 0.35rem;
+		font-size: 0.92rem;
+		color: var(--color-muted);
 	}
 
 	/* Comfortable tap height for the organisation links. */

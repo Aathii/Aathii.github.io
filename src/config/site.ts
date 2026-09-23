@@ -15,11 +15,12 @@ export const site = {
   firstName: 'Aathii',
   /** Two letters for the header mark and the favicon. */
   initials: 'AR',
-  role: 'Developer, co-founder and membership advisor',
+  role: 'Developer, co-founder and sales lead',
   description:
-    'Aathii Rakurakavan builds apps and websites, co-founded EverSeasons Co, and works in sales as a membership advisor at Fitness Connection. Selected work, experience and contact.',
+    'Aathii Rakurakavan is a University of Toronto graduate building IRL, an AI fitness app for iPhone, a Sales Lead at Fitness Connection, and co-founder of EverSeasons Co. Selected work, experience and résumé.',
   /** Shown in structured data (search results). */
   education: 'University of Toronto',
+  location: 'Toronto, ON',
 
   /** Small status line above the hero greeting. Set to '' to hide it. */
   availability: 'Open to new opportunities',
@@ -32,8 +33,8 @@ export const site = {
   photo: '/portrait.webp',
   photoAlt: 'Aathii at the University of Toronto convocation, holding an Honours Bachelor of Science diploma',
 
-  /** Put the file in /public and point at it (e.g. '/resume.pdf'). Empty hides every résumé button. */
-  resumeUrl: '',
+  /** Put the file in /public and point at it. Empty hides every résumé link. Opens in a new tab. */
+  resumeUrl: '/Aathii_Rakurakavan_Resume.pdf',
 
   socials: [
     { label: 'GitHub', url: 'https://github.com/Aathii' },

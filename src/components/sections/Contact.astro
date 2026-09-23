@@ -27,8 +27,8 @@ import { mailto, site } from '../../config/site';
 				<Button href={mailto()} icon="mail">Email me</Button>
 				{
 					site.resumeUrl && (
-						<Button href={site.resumeUrl} icon="download" download>
-							Download résumé
+						<Button href={site.resumeUrl} icon="arrowUpRight" target="_blank" rel="noopener">
+							View résumé (PDF)
 						</Button>
 					)
 				}

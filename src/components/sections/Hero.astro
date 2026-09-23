@@ -14,7 +14,7 @@ const scrollLetters = 'Scroll'.split('');
 				site.availability && (
 					<p class="status label hero-in" style="--d: 0s">
 						<span class="status-dot" aria-hidden="true" />
-						{site.availability}
+						{[site.location, site.availability].filter(Boolean).join(' · ')}
 					</p>
 				)
 			}
@@ -29,7 +29,13 @@ const scrollLetters = 'Scroll'.split('');
 
 			<div class="hero-actions hero-in" style="--d: 0.45s">
 				<Button href="#work" icon="arrowDown">See my work</Button>
-				<a href={mailto()} class="tlink"><span>Email me</span> <Icon name="arrowUpRight" size={16} /></a>
+				{
+					site.resumeUrl && (
+						<a href={site.resumeUrl} target="_blank" rel="noopener" class="tlink">
+							<span>View résumé (PDF)</span> <Icon name="arrowUpRight" size={16} />
+						</a>
+					)
+				}
 			</div>
 
 			<ul class="hero-social hero-in" style="--d: 0.55s" aria-label="Elsewhere">
@@ -43,16 +49,12 @@ const scrollLetters = 'Scroll'.split('');
 						</li>
 					))
 				}
-				{
-					site.resumeUrl && (
-						<li>
-							<a href={site.resumeUrl} download class="social-link">
-								<Icon name="download" size={16} />
-								<span>Résumé</span>
-							</a>
-						</li>
-					)
-				}
+				<li>
+					<a href={mailto()} class="social-link">
+						<Icon name="mail" size={16} />
+						<span>Email</span>
+					</a>
+				</li>
 			</ul>
 		</div>
 
