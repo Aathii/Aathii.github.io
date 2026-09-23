@@ -21,17 +21,16 @@ npm run check      # type-check
 
 Everything gracefully hides when left empty (no photo → monogram card, no résumé → no résumé buttons, no LinkedIn → no icon).
 
-## Before it goes live (checklist)
+## Status and next steps
 
-Done already: name, email, portrait, LinkedIn/X/GitHub, education (from the diploma), the live IRL site, client permission.
-Still open:
+The site is public and indexable (`live: true` in `site.ts`; set it to `false` to hide it from search engines again).
+Everything personal is filled in. Worth doing next:
 
 1. **Résumé** — put the PDF in `public/` and set `resumeUrl: '/resume.pdf'` in `site.ts` (buttons appear automatically).
-2. **Real URL** — set `site` in `astro.config.mjs` (drives canonical URLs, the sitemap and social cards).
-3. **Flip `live: true`** in `site.ts`. Until then the site sends `noindex` and `robots.txt` blocks crawlers.
-4. Optional: a graduation year / major on the Education entry, and a location (`location` in `site.ts`, `facts` in `content.ts`).
-5. Optional: `www.makeitirl.ca` returns a 404 while `makeitirl.ca` works. Add the `www` record in Cloudflare so both resolve.
-6. The Coco Shack card says "Preview · pending client launch". Update its `status`/`liveUrl` once it moves to the real domain.
+2. **Custom domain** (optional) — set `site` in `astro.config.mjs` and add the domain under Settings → Pages.
+3. A graduation year / major on the Education entry, and a location (`location` in `site.ts`, `facts` in `content.ts`).
+4. `www.makeitirl.ca` returns a 404 while `makeitirl.ca` works. Add the `www` record in Cloudflare so both resolve.
+5. The Coco Shack card says "Preview · pending client launch". Update its `status`/`liveUrl` once it moves to the real domain.
 
 The portrait was cropped with `node tools/process-photo.mjs <photo> 185,0,717,896` (x,y,width,height of the framing you want).
 

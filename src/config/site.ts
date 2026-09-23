@@ -5,10 +5,10 @@
 
 export const site = {
   /**
-   * While false the site tells search engines not to index it, so unfinished copy can never be
-   * found by accident. Flip to true when you are ready to publish.
+   * While false the site tells search engines not to index it (and robots.txt blocks crawlers), so
+   * unfinished copy can never be found by accident. True = public and indexable.
    */
-  live: false,
+  live: true,
 
   /** Full name as it appears in the header, footer, metadata and contact section. */
   name: 'Aathii Rakurakavan',
