@@ -1,0 +1,42 @@
+---
+import { statement } from '../../data/content';
+
+const words = statement.split(/\s+/).filter(Boolean);
+---
+
+<section class="section" aria-label="Introduction">
+	<div class="container-page">
+		<p class="eyebrow mb-10" data-reveal>Introduction</p>
+		<p class="statement" data-word-reveal>
+			{
+				words.map((word) => (
+					<>
+						<span class="w">{word}</span>{' '}
+					</>
+				))
+			}
+		</p>
+	</div>
+</section>
+
+<style>
+	.statement {
+		max-width: 60rem;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: clamp(1.9rem, 5.2vw, 4rem);
+		line-height: 1.12;
+		letter-spacing: -0.035em;
+		color: var(--color-bone);
+	}
+
+	.statement .w {
+		opacity: 0.4;
+		transition: opacity 0.2s linear;
+	}
+
+	/* No JS: show everything. */
+	:global(html:not(.js)) .statement .w {
+		opacity: 1;
+	}
+</style>

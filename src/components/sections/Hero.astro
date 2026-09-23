@@ -1,0 +1,380 @@
+---
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { socialIcon } from '../ui/icons';
+import { mailto, site } from '../../config/site';
+import { facts } from '../../data/content';
+
+const words = site.heroName.split(/\s+/).filter(Boolean);
+const longest = Math.max(...words.map((w) => w.length), 4);
+const aside = facts.slice(0, 3);
+---
+
+<section id="top-hero" class="hero" data-hero-glow aria-labelledby="hero-title">
+	<div class="hero-bg" aria-hidden="true">
+		<div class="hero-glow"></div>
+		<div class="hero-grid"></div>
+	</div>
+
+	<div class="container-page hero-inner">
+		<div class="hero-top">
+			{
+				site.availability && (
+					<p class="pill hero-fade" style="--d: 0s">
+						<span class="pill-dot" aria-hidden="true" />
+						{site.availability}
+					</p>
+				)
+			}
+			<p class="hero-year hero-fade" style="--d: 0.05s" aria-hidden="true">Portfolio &mdash; {new Date().getFullYear()}</p>
+		</div>
+
+		<h1 id="hero-title" class="hero-name" style={`--name-chars:${longest}`}>
+			<span class="sr-only">{site.name}, {site.role}</span>
+			<span aria-hidden="true" class="hero-name-lines">
+				{
+					words.map((word, i) => (
+						<span class="hero-line">
+							<span class="hero-line-inner" style={`--i:${i}`}>
+								{word}
+							</span>
+						</span>
+					))
+				}
+			</span>
+		</h1>
+
+		<div class="hero-bottom">
+			<div class="hero-copy">
+				<p class="hero-role hero-fade" style="--d: 0.12s"><span aria-hidden="true">/</span> {site.name} · {site.role}</p>
+				<p class="hero-headline hero-fade" style="--d: 0.16s">{site.headline}</p>
+				<div class="hero-ctas hero-fade" style="--d: 0.26s">
+					<Button href="#work" size="lg" icon="arrowDown">See my work</Button>
+					<Button href={mailto()} size="lg" variant="ghost" icon="arrowUpRight">Get in touch</Button>
+				</div>
+				<ul class="hero-links hero-fade" style="--d: 0.34s" aria-label="Elsewhere">
+					{
+						site.socials.map((s) => (
+							<li>
+								<a href={s.url} target="_blank" rel="noopener noreferrer" class="hero-link">
+									<Icon name={socialIcon(s.label)} size={16} />
+									{s.label}
+								</a>
+							</li>
+						))
+					}
+					{
+						site.resumeUrl && (
+							<li>
+								<a href={site.resumeUrl} download class="hero-link">
+									<Icon name="download" size={16} />
+									Résumé
+								</a>
+							</li>
+						)
+					}
+				</ul>
+			</div>
+
+			<dl class="hero-aside hero-fade" style="--d: 0.34s">
+				{
+					aside.map((f) => (
+						<div>
+							<dt>{f.label}</dt>
+							<dd>{f.value}</dd>
+						</div>
+					))
+				}
+			</dl>
+		</div>
+
+		<div class="hero-foot hero-fade" style="--d: 0.4s" aria-hidden="true">
+			<span class="hero-foot-label">Scroll</span>
+			<span class="scroll-cue-line"></span>
+			<span class="hero-foot-label">Selected work</span>
+		</div>
+	</div>
+</section>
+
+<style>
+	.hero {
+		--gx: 72%;
+		--gy: 24%;
+		position: relative;
+		display: flex;
+		min-height: 100svh;
+		overflow: clip;
+	}
+
+	.hero-bg {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+
+	/* The one glow on the page: lime, hero only, follows the pointer with a lag. */
+	.hero-glow {
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(44rem circle at var(--gx) var(--gy), rgba(198, 244, 50, 0.08), transparent 62%);
+	}
+
+	.hero-grid {
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+		background-size: 6rem 6rem;
+		mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 15%, transparent 75%);
+		-webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 15%, transparent 75%);
+	}
+
+	.hero-inner {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 2rem;
+		padding-top: calc(6rem + env(safe-area-inset-top, 0px));
+		padding-bottom: 1.75rem;
+	}
+
+	.hero-top {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.65rem;
+		padding: 0.5rem 0.95rem;
+		border-radius: 999px;
+		border: 1px solid var(--color-line);
+		background: rgba(255, 255, 255, 0.03);
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.02em;
+		color: var(--color-bone-dim);
+	}
+
+	.pill-dot {
+		flex-shrink: 0;
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 999px;
+		background: var(--color-lime);
+		animation: pulse-dot 1.8s ease-out infinite;
+	}
+
+	.hero-year {
+		display: none;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	@media (min-width: 640px) {
+		.hero-year {
+			display: block;
+		}
+	}
+
+	/* The name scales so its longest word always fits the viewport, phone to widescreen. */
+	.hero-name {
+		font-family: var(--font-hero);
+		font-size: min(11.5rem, calc((100vw - 2.5rem) / (var(--name-chars) * 0.62)));
+		font-weight: 700;
+		line-height: 0.88;
+		letter-spacing: -0.055em;
+		margin-left: -0.05em;
+	}
+
+	.hero-name-lines {
+		display: block;
+	}
+
+	.hero-line {
+		display: block;
+		overflow: hidden;
+		padding-bottom: 0.1em;
+		margin-bottom: -0.1em;
+	}
+
+	.hero-line-inner {
+		display: block;
+		will-change: transform;
+	}
+
+	/* Only the transform is animated; the text is always painted at full opacity (keeps LCP fast). */
+	:global(.js:not(.is-ready)) .hero-line-inner {
+		transform: translate3d(0, 112%, 0);
+	}
+
+	:global(.is-ready) .hero-line-inner {
+		animation: line-up 1s var(--ease-premium) both;
+		animation-delay: calc(0.08s + var(--i) * 0.07s);
+	}
+
+	/* Without JS the entrance simply plays on load; with JS it waits for `is-ready` (scripts/ready.ts). */
+	.hero-fade {
+		animation: fade-up 0.8s var(--ease-premium) both;
+		animation-delay: var(--d, 0s);
+	}
+
+	:global(.js:not(.is-ready)) .hero-fade {
+		opacity: 0;
+		animation-play-state: paused;
+	}
+
+	.hero-bottom {
+		display: grid;
+		gap: 2.5rem;
+		align-items: end;
+	}
+
+	.hero-role {
+		margin-bottom: 1rem;
+		font-family: var(--font-mono);
+		font-size: 0.82rem;
+		letter-spacing: 0.06em;
+		color: var(--color-lime);
+	}
+
+	.hero-role span {
+		margin-right: 0.35rem;
+		opacity: 0.6;
+	}
+
+	.hero-headline {
+		max-width: 44ch;
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.25rem, 2vw + 0.4rem, 1.75rem);
+		line-height: 1.28;
+		letter-spacing: -0.025em;
+		color: var(--color-bone);
+	}
+
+	.hero-ctas {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+		margin-top: 1.75rem;
+	}
+
+	/* Both CTAs stay on one row on the narrowest phones. */
+	@media (max-width: 479px) {
+		.hero-ctas :global(.btn) {
+			min-height: 3rem;
+			padding-inline: 1.15rem;
+		}
+	}
+
+	.hero-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.5rem;
+		margin-top: 1.5rem;
+	}
+
+	.hero-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-height: 2.75rem;
+		font-size: 0.9rem;
+		color: var(--color-bone-dim);
+		transition: color 0.25s ease;
+	}
+
+	@media (hover: hover) {
+		.hero-link:hover {
+			color: var(--color-lime);
+		}
+	}
+
+	.hero-aside {
+		display: none;
+	}
+
+	.hero-foot {
+		display: none;
+		align-items: center;
+		justify-content: space-between;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--color-line);
+	}
+
+	.hero-foot-label {
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	@media (min-width: 768px) {
+		.hero-foot {
+			display: flex;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.hero-inner {
+			gap: 3rem;
+			padding-bottom: 2.25rem;
+		}
+
+		.hero-bottom {
+			grid-template-columns: repeat(12, minmax(0, 1fr));
+			column-gap: 1.5rem;
+		}
+
+		.hero-copy {
+			grid-column: 1 / span 7;
+		}
+
+		.hero-aside {
+			grid-column: 9 / span 4;
+			display: grid;
+			gap: 1.25rem;
+			padding-left: 1.5rem;
+			border-left: 1px solid var(--color-line);
+		}
+
+		.hero-aside dt {
+			margin-bottom: 0.2rem;
+			font-family: var(--font-mono);
+			font-size: 0.7rem;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: var(--color-muted);
+		}
+
+		.hero-aside dd {
+			font-size: 0.95rem;
+			color: var(--color-bone);
+		}
+
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.pill-dot {
+			animation: none;
+		}
+		:global(.js:not(.is-ready)) .hero-line-inner {
+			transform: none;
+		}
+		:global(.js:not(.is-ready)) .hero-fade {
+			opacity: 1;
+		}
+	}
+</style>

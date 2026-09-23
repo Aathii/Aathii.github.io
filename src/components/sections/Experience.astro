@@ -1,0 +1,119 @@
+---
+import { experience } from '../../data/content';
+---
+
+<section id="experience" class="section" aria-labelledby="experience-title" data-inert-when-menu>
+	<div class="container-page">
+		<header class="section-head">
+			<p class="eyebrow" data-reveal><b>03</b> / Experience</p>
+			<h2 id="experience-title" class="section-title" data-reveal="clip">
+				<span class="reveal-inner">The <em>short</em> version.</span>
+			</h2>
+		</header>
+
+		<ol class="timeline">
+			{
+				experience.map((item) => (
+					<li class="entry">
+						<span class="entry-rule" data-reveal="line" aria-hidden="true"><span class="reveal-inner" /></span>
+						<p class="entry-period" data-reveal>{item.period}</p>
+						<div class="entry-body">
+							<h3 class="entry-title" data-reveal>{item.title}</h3>
+							<p class="entry-org" data-reveal>{item.org}</p>
+							{item.points.length > 0 && (
+								<ul class="entry-points">
+									{item.points.map((point) => <li data-reveal>{point}</li>)}
+								</ul>
+							)}
+						</div>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>
+
+<style>
+	.timeline {
+		margin-top: 0;
+	}
+
+	.entry {
+		position: relative;
+		display: grid;
+		gap: 1rem;
+		padding-block: 2.25rem;
+	}
+
+	.entry-rule {
+		position: absolute;
+		inset: 0 0 auto 0;
+		height: 1px;
+		background: var(--color-line);
+	}
+
+	.entry-rule :global(.reveal-inner) {
+		background: var(--color-bone-dim);
+	}
+
+	.entry-period {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		letter-spacing: 0.06em;
+		color: var(--color-lime);
+	}
+
+	.entry-title {
+		font-size: clamp(1.4rem, 2.6vw, 2rem);
+		line-height: 1.12;
+		letter-spacing: -0.03em;
+	}
+
+	.entry-org {
+		margin-top: 0.35rem;
+		font-size: 1rem;
+		color: var(--color-bone-dim);
+	}
+
+	.entry-points {
+		display: grid;
+		gap: 0.6rem;
+		max-width: 40rem;
+		margin-top: 1.25rem;
+		font-size: 0.98rem;
+		line-height: 1.6;
+		color: var(--color-muted);
+	}
+
+	.entry-points li {
+		position: relative;
+		padding-left: 1.25rem;
+	}
+
+	.entry-points li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.7em;
+		width: 0.5rem;
+		height: 1px;
+		background: var(--color-lime);
+	}
+
+	/* Same 12-column rhythm as the section headers: label in 1-3, content from 4. */
+	@media (min-width: 768px) {
+		.entry {
+			grid-template-columns: repeat(12, minmax(0, 1fr));
+			column-gap: 1.5rem;
+			padding-block: 2.75rem;
+		}
+
+		.entry-period {
+			grid-column: 1 / span 3;
+		}
+
+		.entry-body {
+			grid-column: 4 / span 9;
+		}
+	}
+</style>

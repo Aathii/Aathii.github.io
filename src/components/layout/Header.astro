@@ -1,0 +1,303 @@
+---
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { socialIcon } from '../ui/icons';
+import { mailto, nav, site } from '../../config/site';
+---
+
+<header id="site-header" class="site-header">
+	<div class="container-page flex h-[4.5rem] items-center justify-between gap-6 md:h-20">
+		<a href="#top" class="brand">
+			<span class="brand-mark" aria-hidden="true">{site.initials}</span>
+			<span class="brand-name">{site.name}</span>
+		</a>
+
+		<nav class="hidden items-center gap-9 lg:flex" aria-label="Primary">
+			{
+				nav.map((item) => (
+					<a href={item.href} data-nav-link class="link-line nav-link">
+						{item.label}
+					</a>
+				))
+			}
+		</nav>
+
+		<div class="flex items-center gap-3">
+			<Button href={mailto()} size="sm" icon="arrowUpRight" class="hidden sm:inline-flex">Get in touch</Button>
+			<button
+				id="menu-toggle"
+				type="button"
+				class="menu-toggle lg:hidden"
+				aria-expanded="false"
+				aria-controls="mobile-menu"
+				aria-label="Open menu"
+			>
+				<span class="menu-bar menu-bar-top"></span>
+				<span class="menu-bar menu-bar-bottom"></span>
+			</button>
+		</div>
+	</div>
+</header>
+
+<div id="mobile-menu" class="mobile-menu" inert>
+	<nav class="mobile-menu-nav container-page" aria-label="Mobile">
+		<ol>
+			{
+				nav.map((item, i) => (
+					<li style={`--i:${i}`}>
+						<a href={item.href} class="mobile-link">
+							<span class="mobile-link-index">{String(i + 1).padStart(2, '0')}</span>
+							<span class="mobile-link-label">{item.label}</span>
+						</a>
+					</li>
+				))
+			}
+		</ol>
+		<div class="mobile-menu-foot" style={`--i:${nav.length}`}>
+			<a href={mailto()} class="mobile-mail">{site.contact.email}</a>
+			<ul class="flex gap-3">
+				{
+					site.socials.map((s) => (
+						<li>
+							<a href={s.url} target="_blank" rel="noopener noreferrer" class="mobile-social" aria-label={`${s.label} (opens in a new tab)`}>
+								<Icon name={socialIcon(s.label)} size={20} />
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</nav>
+</div>
+
+<style>
+	.site-header {
+		position: fixed;
+		inset: 0 0 auto 0;
+		z-index: 50;
+		padding-top: env(safe-area-inset-top, 0px);
+		border-bottom: 1px solid transparent;
+		transition:
+			transform 0.6s var(--ease-premium),
+			background-color 0.4s ease,
+			border-color 0.4s ease,
+			backdrop-filter 0.4s ease;
+	}
+
+	.site-header.is-scrolled {
+		background: rgba(10, 10, 11, 0.6);
+		-webkit-backdrop-filter: blur(12px) saturate(1.4);
+		backdrop-filter: blur(12px) saturate(1.4);
+		border-bottom-color: var(--color-line);
+	}
+
+	.site-header.is-hidden {
+		transform: translate3d(0, -101%, 0);
+	}
+
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-family: var(--font-display);
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+
+	.brand-mark {
+		display: grid;
+		place-items: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 0.6rem;
+		background: var(--color-lime);
+		color: var(--color-ink);
+		font-size: 0.95rem;
+		letter-spacing: -0.04em;
+		transition: transform 0.6s var(--ease-premium);
+	}
+
+	.brand:hover .brand-mark {
+		transform: rotate(-8deg) scale(1.05);
+	}
+
+	/* Visually hidden on phones (the monogram carries the brand) but always the link's accessible name. */
+	.brand-name {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+		font-size: 1rem;
+	}
+
+	@media (min-width: 640px) {
+		.brand-name {
+			position: static;
+			width: auto;
+			height: auto;
+			overflow: visible;
+			clip-path: none;
+		}
+	}
+
+	.nav-link {
+		font-size: 0.92rem;
+		font-weight: 500;
+		color: var(--color-bone-dim);
+		transition: color 0.3s ease;
+	}
+
+	.nav-link:hover,
+	.nav-link[aria-current='true'] {
+		color: var(--color-bone);
+	}
+
+	/* Hamburger morphs into a cross. */
+	.menu-toggle {
+		position: relative;
+		width: 2.75rem;
+		height: 2.75rem;
+		border-radius: 999px;
+		border: 1px solid var(--color-line);
+		background: rgba(244, 244, 240, 0.04);
+	}
+
+	.menu-bar {
+		position: absolute;
+		left: 50%;
+		width: 1.1rem;
+		height: 1.5px;
+		margin-left: -0.55rem;
+		background: var(--color-bone);
+		transition:
+			transform 0.55s var(--ease-premium),
+			top 0.55s var(--ease-premium);
+	}
+
+	.menu-bar-top {
+		top: calc(50% - 4px);
+	}
+
+	.menu-bar-bottom {
+		top: calc(50% + 3px);
+	}
+
+	.menu-toggle[aria-expanded='true'] .menu-bar-top {
+		top: calc(50% - 0.75px);
+		transform: rotate(45deg);
+	}
+
+	.menu-toggle[aria-expanded='true'] .menu-bar-bottom {
+		top: calc(50% - 0.75px);
+		transform: rotate(-45deg);
+	}
+
+	/* ---------- Full-screen mobile menu ---------- */
+	.mobile-menu {
+		position: fixed;
+		inset: 0;
+		z-index: 45;
+		display: flex;
+		align-items: stretch;
+		background: var(--color-ink);
+		clip-path: inset(0 0 100% 0);
+		visibility: hidden;
+		transition:
+			clip-path 0.8s var(--ease-premium),
+			visibility 0s linear 0.8s;
+	}
+
+	.mobile-menu.is-open {
+		clip-path: inset(0 0 0 0);
+		visibility: visible;
+		transition:
+			clip-path 0.8s var(--ease-premium),
+			visibility 0s;
+	}
+
+	.mobile-menu-nav {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding-top: 6.5rem;
+		padding-bottom: max(2rem, env(safe-area-inset-bottom));
+	}
+
+	.mobile-menu ol {
+		display: grid;
+		gap: 0.25rem;
+	}
+
+	.mobile-link {
+		display: flex;
+		align-items: baseline;
+		gap: 1rem;
+		padding-block: 0.4rem;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: clamp(2.6rem, 12vw, 4.5rem);
+		line-height: 1.05;
+		letter-spacing: -0.04em;
+		color: var(--color-bone);
+	}
+
+	.mobile-link-index {
+		font-family: var(--font-mono);
+		font-weight: 400;
+		font-size: 0.8rem;
+		letter-spacing: 0.06em;
+		color: var(--color-lime);
+	}
+
+	.mobile-menu li,
+	.mobile-menu-foot {
+		opacity: 0;
+		transform: translate3d(0, 28px, 0);
+		transition:
+			opacity 0.4s ease,
+			transform 0.4s ease;
+	}
+
+	.mobile-menu.is-open li,
+	.mobile-menu.is-open .mobile-menu-foot {
+		opacity: 1;
+		transform: none;
+		transition:
+			opacity 0.8s var(--ease-premium) calc(0.18s + var(--i) * 0.07s),
+			transform 0.9s var(--ease-premium) calc(0.18s + var(--i) * 0.07s);
+	}
+
+	.mobile-menu-foot {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--color-line);
+	}
+
+	.mobile-mail {
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+		color: var(--color-bone-dim);
+		overflow-wrap: anywhere;
+	}
+
+	.mobile-social {
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		border-radius: 999px;
+		border: 1px solid var(--color-line);
+		color: var(--color-bone);
+	}
+
+	@media (min-width: 1024px) {
+		.mobile-menu {
+			display: none;
+		}
+	}
+</style>

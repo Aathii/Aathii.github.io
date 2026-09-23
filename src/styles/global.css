@@ -1,0 +1,531 @@
+@import "tailwindcss";
+
+@theme {
+  /* Surfaces: a ladder of near-blacks separated by 1px borders instead of shadows. */
+  --color-ink: #0a0a0b;
+  --color-ink-soft: #0e0e10;
+  --color-panel: #111113;
+  --color-panel-2: #17171a;
+  --color-line: rgba(255, 255, 255, 0.09);
+  --color-line-strong: rgba(255, 255, 255, 0.18);
+
+  /* Text tiers, contrast on --color-ink: 18.1:1, 7.7:1, 5.8:1. */
+  --color-bone: #f5f5f4;
+  --color-bone-dim: #a1a1aa;
+  --color-muted: #8a8a93;
+
+  /* The only accent. */
+  --color-lime: #c6f432;
+  --color-error: #ff9b8a;
+
+  --font-display: "Geist Variable", "Segoe UI", system-ui, sans-serif;
+  --font-hero: "Bricolage Grotesque Variable", "Geist Variable", system-ui, sans-serif;
+  --font-body: "Geist Variable", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "Cascadia Code", Menlo, monospace;
+
+  --ease-premium: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-snap: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Three radii only. */
+  --radius-control: 0.5rem;
+  --radius-card: 1rem;
+}
+
+/*
+  Page ground. Deliberately outside @layer: unlayered rules outrank layered ones, so no host
+  reset (a preview shell, injected extension styles) can repaint the page or swap its fonts.
+*/
+:root {
+  background: var(--color-ink);
+  color-scheme: dark;
+}
+
+:root body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-bone);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(4.5rem + env(safe-area-inset-top, 0px));
+    scrollbar-gutter: stable;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html.lenis {
+    scroll-behavior: auto;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  a,
+  button,
+  summary,
+  label {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 3px;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  [tabindex='-1']:focus {
+    outline: none;
+  }
+}
+
+@layer components {
+  .container-page {
+    --gutter: 1.25rem;
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-left: max(var(--gutter), env(safe-area-inset-left));
+    padding-right: max(var(--gutter), env(safe-area-inset-right));
+  }
+
+  @media (min-width: 768px) {
+    .container-page {
+      --gutter: 2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container-page {
+      --gutter: 3rem;
+    }
+  }
+
+  .section {
+    padding-block: clamp(5rem, 10vw, 9rem);
+  }
+
+  /* Mono label: "01 / Selected work". The number carries the accent. */
+  .eyebrow {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .eyebrow b {
+    font-weight: 500;
+    color: var(--color-lime);
+  }
+
+  /* Label in columns 1-3, content in 4-12 on desktop; stacked on phones. */
+  .section-head {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: clamp(3rem, 7vw, 5rem);
+  }
+
+  @media (min-width: 1024px) {
+    .section-head {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 1.5rem;
+    }
+
+    .section-head > .eyebrow {
+      grid-column: 1 / span 3;
+      padding-top: 0.9rem;
+    }
+
+    .section-head > :not(.eyebrow) {
+      grid-column: 4 / span 9;
+    }
+  }
+
+  .section-title {
+    max-width: 18ch;
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 4.6vw + 0.5rem, 4.5rem);
+    line-height: 1.04;
+    letter-spacing: -0.04em;
+    font-weight: 600;
+  }
+
+  .section-title em {
+    font-style: normal;
+    color: var(--color-lime);
+  }
+
+  /* ---------- Buttons: fill sweep + text roll + magnetic (scripts/pointer-fx.ts) ---------- */
+  .btn {
+    --mx: 0px;
+    --my: 0px;
+    --s: 1;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding-inline: 1.5rem;
+    border-radius: 999px;
+    overflow: hidden;
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transform: translate3d(var(--mx), var(--my), 0) scale(var(--s));
+    transition:
+      transform 0.5s var(--ease-premium),
+      color 0.3s var(--ease-premium),
+      border-color 0.3s var(--ease-premium);
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    transform: translate3d(0, 101%, 0);
+    transition: transform 0.5s var(--ease-premium);
+  }
+
+  .btn-roll {
+    display: block;
+    height: 1.2em;
+    overflow: hidden;
+  }
+
+  .btn-roll-inner {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.5s var(--ease-premium);
+  }
+
+  .btn-roll-inner > span {
+    display: block;
+    line-height: 1.2em;
+  }
+
+  .btn-icon {
+    flex-shrink: 0;
+    transition: transform 0.5s var(--ease-premium);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover::before {
+      transform: translate3d(0, 0, 0);
+    }
+
+    .btn:hover .btn-roll-inner {
+      transform: translate3d(0, -50%, 0);
+    }
+
+    .btn:hover .btn-icon {
+      transform: translate3d(2px, -2px, 0);
+    }
+  }
+
+  .btn:active {
+    --s: 0.97;
+    transition-duration: 0.12s;
+  }
+
+  .btn-primary {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+
+  .btn-primary::before {
+    background: var(--color-bone);
+  }
+
+  .btn-ghost {
+    color: var(--color-bone);
+    border: 1px solid var(--color-line-strong);
+  }
+
+  .btn-ghost::before {
+    background: var(--color-bone);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-ghost:hover {
+      color: var(--color-ink);
+      border-color: var(--color-bone);
+    }
+  }
+
+  .btn-sm {
+    min-height: 2.75rem;
+    padding-inline: 1.15rem;
+    font-size: 0.86rem;
+  }
+
+  .btn-lg {
+    min-height: 3.25rem;
+    padding-inline: 1.75rem;
+    font-size: 1rem;
+  }
+
+  /* ---------- Text links ---------- */
+  .link-line {
+    position: relative;
+  }
+
+  .link-line::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s var(--ease-premium);
+  }
+
+  .link-line[aria-current='true']::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  @media (hover: hover) {
+    .link-line:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.9rem;
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--color-bone-dim);
+    white-space: nowrap;
+  }
+
+  /* ---------- Scroll reveal (scripts/reveal.ts). Gated on .js so content never hides without JS. ---------- */
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+    transition:
+      opacity 0.7s var(--ease-premium),
+      transform 0.9s var(--ease-premium);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /*
+    Clip/line reveals animate an INNER element: IntersectionObserver measures the visible
+    (clipped) area of its target, so a fully-clipped target would never register as in view.
+  */
+  .js [data-reveal='clip'],
+  .js [data-reveal='line'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js [data-reveal='clip'] > .reveal-inner {
+    display: block;
+    translate: 0 0.25em;
+    clip-path: inset(100% -5% -20% -5%);
+    transition:
+      clip-path 0.9s var(--ease-premium),
+      translate 0.9s var(--ease-premium);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js [data-reveal='clip'].is-in > .reveal-inner {
+    translate: 0 0;
+    clip-path: inset(-20% -5% -20% -5%);
+  }
+
+  .js [data-reveal='line'] > .reveal-inner {
+    display: block;
+    height: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.2s var(--ease-premium);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js [data-reveal='line'].is-in > .reveal-inner {
+    transform: scaleX(1);
+  }
+
+  html.scroll-locked,
+  html.scroll-locked body {
+    overflow: hidden;
+  }
+
+  /* ---------- Pointer spotlight on cards (scripts/pointer-fx.ts) ---------- */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .spotlight::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      380px circle at var(--sx, 50%) var(--sy, 50%),
+      rgba(198, 244, 50, 0.08),
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .spotlight:hover::after {
+      opacity: 1;
+    }
+  }
+
+  /* ---------- Film grain: one static fixed layer, 4% ---------- */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 180px 180px;
+  }
+
+  /* ---------- Scroll cue ---------- */
+  .scroll-cue-line {
+    position: relative;
+    width: 1px;
+    height: 2.5rem;
+    overflow: hidden;
+    background: var(--color-line-strong);
+  }
+
+  .scroll-cue-line::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -45%;
+    width: 100%;
+    height: 45%;
+    background: var(--color-lime);
+    animation: scroll-cue 2.2s var(--ease-snap) infinite;
+  }
+}
+
+@keyframes scroll-cue {
+  to {
+    top: 100%;
+  }
+}
+
+@keyframes line-up {
+  from {
+    transform: translate3d(0, 108%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgba(198, 244, 50, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(198, 244, 50, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+
+  [data-reveal],
+  [data-reveal] .reveal-inner {
+    opacity: 1 !important;
+    transform: none !important;
+    translate: none !important;
+    clip-path: none !important;
+  }
+
+  .scroll-cue-line::after {
+    animation: none !important;
+  }
+}

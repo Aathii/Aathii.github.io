@@ -1,0 +1,81 @@
+---
+import { skills } from '../../data/content';
+---
+
+<section id="skills" class="section" aria-labelledby="skills-title" data-inert-when-menu>
+	<div class="container-page">
+		<header class="section-head">
+			<p class="eyebrow" data-reveal><b>04</b> / Skills</p>
+			<h2 id="skills-title" class="section-title" data-reveal="clip">
+				<span class="reveal-inner">What I <em>work</em> with.</span>
+			</h2>
+		</header>
+
+		<div class="skills-grid">
+			{
+				skills.map((group) => (
+					<div class="group spotlight" data-reveal>
+						<h3 class="group-label">{group.label}</h3>
+						<ul class="group-items">
+							{group.items.map((item) => <li class="tag">{item}</li>)}
+						</ul>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.skills-grid {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.group {
+		display: grid;
+		align-content: start;
+		gap: 1.25rem;
+		padding: 1.5rem;
+		border-radius: var(--radius-card);
+		border: 1px solid var(--color-line);
+		background: var(--color-panel);
+	}
+
+	.group-label {
+		font-family: var(--font-mono);
+		font-size: 0.74rem;
+		font-weight: 500;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-lime);
+	}
+
+	.group-items {
+		display: flex;
+		align-content: flex-start;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.group-items .tag {
+		min-height: 2.2rem;
+		padding-inline: 0.9rem;
+		font-family: var(--font-body);
+		font-size: 0.88rem;
+		color: var(--color-bone);
+	}
+
+	@media (min-width: 640px) {
+		.skills-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.skills-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 1.25rem;
+		}
+	}
+</style>

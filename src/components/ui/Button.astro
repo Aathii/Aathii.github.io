@@ -1,0 +1,47 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+interface Props {
+	href?: string;
+	variant?: 'primary' | 'ghost';
+	size?: 'sm' | 'md' | 'lg';
+	icon?: IconName;
+	magnetic?: boolean;
+	class?: string;
+	external?: boolean;
+	download?: boolean;
+	type?: 'button' | 'submit';
+	[attr: string]: unknown;
+}
+
+const {
+	href,
+	variant = 'primary',
+	size = 'md',
+	icon = 'arrowUpRight',
+	magnetic = false,
+	class: className = '',
+	external = false,
+	download = false,
+	type = 'button',
+	...rest
+} = Astro.props;
+
+const sizeClass = size === 'sm' ? 'btn-sm' : size === 'lg' ? 'btn-lg' : '';
+const classes = `btn btn-${variant} ${sizeClass} ${className}`.trim();
+const Tag = href ? 'a' : 'button';
+const linkProps = href
+	? { href, ...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {}), ...(download ? { download: '' } : {}) }
+	: { type };
+---
+
+<Tag class={classes} data-magnetic={magnetic ? '' : undefined} {...linkProps} {...rest}>
+	<span class="btn-roll">
+		<span class="btn-roll-inner">
+			<span><slot /></span>
+			<span aria-hidden="true"><slot /></span>
+		</span>
+	</span>
+	<Icon name={icon} size={18} class="btn-icon" />
+</Tag>

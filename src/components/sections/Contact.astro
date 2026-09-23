@@ -1,0 +1,200 @@
+---
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { socialIcon } from '../ui/icons';
+import { mailto, site } from '../../config/site';
+---
+
+<section id="contact" class="contact section" aria-labelledby="contact-title" data-hide-mobile-cta data-inert-when-menu>
+	<div class="contact-glow" aria-hidden="true"></div>
+	<div class="container-page contact-inner">
+		<p class="eyebrow" data-reveal><b>05</b> / Contact</p>
+		<h2 id="contact-title" class="contact-title" data-reveal="clip">
+			<span class="reveal-inner">Let's build something <em>great</em> together.</span>
+		</h2>
+		<p class="contact-lede" data-reveal>
+			Recruiting, collaborating or just curious about a project? I read every message and reply personally.
+		</p>
+
+		<div class="contact-mail" data-reveal>
+			<a href={mailto()} class="mail-link">{site.contact.email}</a>
+			<button type="button" class="copy-btn" data-copy={site.contact.email} aria-label="Copy email address">
+				<Icon name="copy" size={16} />
+				<span data-copy-label>Copy</span>
+			</button>
+		</div>
+
+		<div class="contact-actions" data-reveal>
+			<Button href={mailto()} size="lg" icon="arrowUpRight" magnetic>Get in touch</Button>
+			{
+				site.resumeUrl && (
+					<Button href={site.resumeUrl} size="lg" variant="ghost" icon="download" download>
+						Download résumé
+					</Button>
+				)
+			}
+		</div>
+
+		<ul class="contact-socials" data-reveal>
+			{
+				site.socials.map((s) => (
+					<li>
+						<a href={s.url} target="_blank" rel="noopener noreferrer" class="social-link">
+							<Icon name={socialIcon(s.label)} size={18} />
+							<span>{s.label}</span>
+							<Icon name="arrowUpRight" size={14} class="opacity-60" />
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.contact {
+		position: relative;
+		overflow: clip;
+		border-top: 1px solid var(--color-line);
+		padding-block: clamp(6rem, 13vw, 11rem);
+	}
+
+	.contact-glow {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background:
+			radial-gradient(46rem circle at 50% 115%, rgba(198, 244, 50, 0.07), transparent 62%);
+	}
+
+	.contact-inner {
+		position: relative;
+		display: grid;
+		justify-items: start;
+		gap: 2rem;
+	}
+
+	.contact-title {
+		max-width: 16ch;
+		font-family: var(--font-hero);
+		font-size: clamp(2.75rem, 8vw, 7.5rem);
+		line-height: 0.95;
+		letter-spacing: -0.05em;
+		font-weight: 700;
+	}
+
+	.contact-title em {
+		font-style: normal;
+		color: var(--color-lime);
+	}
+
+	.contact-lede {
+		max-width: 44ch;
+		font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+		line-height: 1.6;
+		color: var(--color-bone-dim);
+	}
+
+	.contact-mail {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem 1.25rem;
+		margin-top: 0.5rem;
+	}
+
+	.mail-link {
+		display: inline-block;
+		padding-block: 0.4rem;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: clamp(1.5rem, 5vw, 3.5rem);
+		letter-spacing: -0.035em;
+		overflow-wrap: anywhere;
+		border-bottom: 1px solid var(--color-line);
+		transition:
+			color 0.3s ease,
+			border-color 0.3s ease;
+	}
+
+	@media (hover: hover) {
+		.mail-link:hover {
+			color: var(--color-lime);
+			border-color: var(--color-lime);
+		}
+	}
+
+	.copy-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-height: 2.75rem;
+		padding-inline: 1.1rem;
+		border-radius: 999px;
+		border: 1px solid var(--color-line);
+		font-size: 0.85rem;
+		font-weight: 500;
+		color: var(--color-bone-dim);
+		cursor: pointer;
+		transition:
+			border-color 0.3s ease,
+			color 0.3s ease,
+			background-color 0.3s ease;
+	}
+
+	@media (hover: hover) {
+		.copy-btn:hover {
+			border-color: var(--color-bone-dim);
+			color: var(--color-bone);
+		}
+	}
+
+	.copy-btn[data-state='copied'] {
+		border-color: var(--color-lime);
+		color: var(--color-lime);
+	}
+
+	.copy-btn[data-state='failed'] {
+		border-color: var(--color-error);
+		color: var(--color-error);
+	}
+
+	.contact-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 0.5rem;
+	}
+
+	.contact-socials {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 1rem;
+		padding-top: 2rem;
+		width: 100%;
+		border-top: 1px solid var(--color-line);
+	}
+
+	.social-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		min-height: 2.75rem;
+		padding-inline: 1.1rem;
+		border-radius: 999px;
+		border: 1px solid var(--color-line);
+		font-size: 0.9rem;
+		color: var(--color-bone-dim);
+		transition:
+			border-color 0.3s ease,
+			color 0.3s ease;
+	}
+
+	@media (hover: hover) {
+		.social-link:hover {
+			border-color: var(--color-lime);
+			color: var(--color-lime);
+		}
+	}
+</style>

@@ -1,0 +1,464 @@
+---
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { mailto } from '../../config/site';
+import type { Project } from '../../data/content';
+
+interface Props {
+	project: Project;
+	index: number;
+	total: number;
+}
+
+const { project, index, total } = Astro.props;
+const n = String(index + 1).padStart(2, '0');
+const t = String(total).padStart(2, '0');
+
+const hasLive = Boolean(project.liveUrl);
+const primaryHref = project.liveUrl ?? project.repoUrl;
+const mediaLabel = hasLive ? `Open the ${project.title} live site (opens in a new tab)` : `View the ${project.title} code on GitHub (opens in a new tab)`;
+
+let address = `${project.title.toLowerCase().replace(/\s+/g, '')} · screenshot`;
+if (project.liveUrl) {
+	const u = new URL(project.liveUrl);
+	address = `${u.host}${u.pathname === '/' ? '' : u.pathname.replace(/\/$/, '')}`;
+}
+
+const isPrivate = !project.liveUrl && !project.repoUrl;
+---
+
+<article class="project" style={`--i:${index}`} aria-labelledby={`project-${project.slug}`}>
+	<div class="project-inner" data-reveal="card">
+		<div class="project-media" data-reveal>
+			{
+				project.images ? (
+					<>
+						{primaryHref ? (
+							<a class="media-link" href={primaryHref} target="_blank" rel="noopener noreferrer" aria-label={mediaLabel}>
+								<div class="browser">
+									<div class="browser-bar" aria-hidden="true">
+										<span class="dots">
+											<i />
+											<i />
+											<i />
+										</span>
+										<span class="address">{address}</span>
+									</div>
+									<div class="viewport">
+										<img
+											class:list={['shot', { pan: project.images.pan }]}
+											src={project.images.desktop}
+											alt={project.imageAlt ?? `${project.title} screenshot`}
+											width={project.images.pan ? 1100 : 1440}
+											height={project.images.pan ? 2521 : 900}
+											loading={index === 0 ? 'eager' : 'lazy'}
+											decoding="async"
+										/>
+									</div>
+								</div>
+								{project.images.mobile && (
+									<div class="phone" aria-hidden="true">
+										<img src={project.images.mobile} alt="" width="390" height="844" loading="lazy" decoding="async" />
+									</div>
+								)}
+								<span class="visit-chip" aria-hidden="true">
+									{hasLive ? 'Visit live site' : 'View code'}
+									<Icon name="arrowUpRight" size={14} />
+								</span>
+							</a>
+						) : null}
+					</>
+				) : (
+					<div class="cover" role="img" aria-label={`${project.title} project cover`}>
+						<span class="cover-word" aria-hidden="true">{project.coverWord ?? project.title}</span>
+						<span class="cover-tags" aria-hidden="true">
+							{project.tags.slice(0, 3).map((tag) => <i>{tag}</i>)}
+						</span>
+					</div>
+				)
+			}
+		</div>
+
+		<div class="project-body">
+			<p class="project-kicker" data-reveal>
+				<span class="project-index">{n}<span> / {t}</span></span>
+				<span>{project.kind}</span>
+			</p>
+
+			<h3 id={`project-${project.slug}`} class="project-title" data-reveal>{project.title}</h3>
+			<p class="project-summary" data-reveal>{project.summary}</p>
+			<p class="project-desc" data-reveal>{project.description}</p>
+
+			<dl class="project-meta" data-reveal>
+				<div><dt>Role</dt><dd>{project.role}</dd></div>
+				<div><dt>Year</dt><dd>{project.year}</dd></div>
+				<div><dt>Status</dt><dd>{project.status}</dd></div>
+			</dl>
+
+			<ul class="project-tags" aria-label="Technologies" data-reveal>
+				{project.tags.map((tag) => <li class="tag">{tag}</li>)}
+			</ul>
+
+			<div class="project-actions" data-reveal>
+				{project.liveUrl && (
+					<Button href={project.liveUrl} external icon="arrowUpRight" size="sm">
+						Visit live site
+					</Button>
+				)}
+				{project.repoUrl && (
+					<Button href={project.repoUrl} external variant="ghost" icon="github" size="sm">
+						View code
+					</Button>
+				)}
+				{isPrivate && (
+					<Button href={mailto(`Walkthrough: ${project.title}`)} variant="ghost" icon="mail" size="sm">
+						Ask for a walkthrough
+					</Button>
+				)}
+			</div>
+		</div>
+	</div>
+</article>
+
+<style>
+	.project {
+		position: relative;
+	}
+
+	.project-inner {
+		position: relative;
+		display: grid;
+		gap: 2rem;
+		padding: 1.25rem;
+		border-radius: var(--radius-card);
+		border: 1px solid var(--color-line);
+		background: var(--color-panel);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+		overflow: clip;
+	}
+
+	@media (min-width: 640px) {
+		.project-inner {
+			padding: 1.75rem;
+			gap: 2.5rem;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		/* Cards pin under the header and the next one slides over the top. */
+		.project {
+			position: sticky;
+			top: calc(5.75rem + var(--i) * 0.9rem);
+		}
+
+		.project-inner {
+			grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+			align-items: center;
+			gap: 3.5rem;
+			padding: 2rem 2.75rem 2rem 2rem;
+		}
+
+		.project:nth-child(even) .project-inner {
+			grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+			padding: 2rem 2rem 2rem 2.75rem;
+		}
+
+		.project:nth-child(even) .project-media {
+			order: 2;
+		}
+	}
+
+	/* ---------- Media ---------- */
+	.project-media {
+		position: relative;
+		min-width: 0;
+		padding-right: 7%;
+		padding-bottom: 6%;
+	}
+
+	.media-link {
+		position: relative;
+		display: block;
+		border-radius: 1rem;
+	}
+
+	.browser {
+		overflow: hidden;
+		border-radius: var(--radius-control);
+		border: 1px solid var(--color-line-strong);
+		background: var(--color-ink);
+	}
+
+	.browser-bar {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		height: 2.1rem;
+		padding-inline: 0.85rem;
+		border-bottom: 1px solid var(--color-line);
+		background: rgba(244, 244, 240, 0.03);
+	}
+
+	.dots {
+		display: flex;
+		gap: 0.35rem;
+	}
+
+	.dots i {
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 999px;
+		background: rgba(244, 244, 240, 0.2);
+	}
+
+	.address {
+		flex: 1;
+		min-width: 0;
+		max-width: 22rem;
+		margin-inline: auto;
+		padding: 0.18rem 0.75rem;
+		border-radius: 999px;
+		background: rgba(244, 244, 240, 0.06);
+		font-family: var(--font-mono);
+		font-size: 0.66rem;
+		text-align: center;
+		color: var(--color-muted);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	/* 16:10 window onto the screenshot. A tall capture shows its top at rest and pans on hover. */
+	.viewport {
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+	}
+
+	.shot {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 50% 0%;
+		transition: object-position 0.8s var(--ease-premium);
+	}
+
+	.phone {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		width: 21%;
+		overflow: hidden;
+		border-radius: 1rem;
+		border: 4px solid var(--color-panel-2);
+		background: var(--color-ink);
+		box-shadow: 0 0 0 1px var(--color-line-strong);
+		transition: transform 0.9s var(--ease-premium);
+	}
+
+	.phone img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.visit-chip {
+		position: absolute;
+		left: 1rem;
+		bottom: 1rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.5rem 0.85rem;
+		border-radius: 999px;
+		background: var(--color-lime);
+		color: var(--color-ink);
+		font-size: 0.78rem;
+		font-weight: 600;
+		opacity: 1;
+		transform: none;
+		transition:
+			opacity 0.4s ease,
+			transform 0.6s var(--ease-premium);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.visit-chip {
+			opacity: 0;
+			transform: translate3d(0, 8px, 0);
+		}
+
+		.media-link:hover .visit-chip,
+		.media-link:focus-visible .visit-chip {
+			opacity: 1;
+			transform: none;
+		}
+
+		.media-link:hover .shot.pan,
+		.media-link:focus-visible .shot.pan {
+			object-position: 50% 100%;
+			transition: object-position 7s cubic-bezier(0.45, 0, 0.55, 1);
+		}
+
+		.media-link:hover .phone {
+			transform: translate3d(0, -8px, 0);
+		}
+	}
+
+	/* On touch there is no hover, and the buttons below already say where the link goes. */
+	@media (hover: none) {
+		.visit-chip {
+			display: none;
+		}
+	}
+
+	/* ---------- Generated cover (projects without screenshots) ---------- */
+	.cover {
+		position: relative;
+		display: grid;
+		place-items: center;
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+		border-radius: var(--radius-control);
+		border: 1px solid var(--color-line-strong);
+		background:
+			radial-gradient(60% 80% at 16% 6%, rgba(198, 244, 50, 0.16), transparent 62%),
+			radial-gradient(70% 70% at 96% 100%, rgba(255, 255, 255, 0.07), transparent 62%),
+			var(--color-ink-soft);
+	}
+
+	.cover::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(to right, rgba(244, 244, 240, 0.06) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(244, 244, 240, 0.06) 1px, transparent 1px);
+		background-size: 3rem 3rem;
+		mask-image: radial-gradient(ellipse at center, #000 30%, transparent 78%);
+		-webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 78%);
+	}
+
+	.cover-word {
+		position: relative;
+		font-family: var(--font-hero);
+		font-weight: 700;
+		font-size: clamp(5rem, 20vw, 11rem);
+		line-height: 1;
+		letter-spacing: -0.07em;
+		color: var(--color-bone);
+	}
+
+	.cover-tags {
+		position: absolute;
+		left: 1rem;
+		bottom: 1rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.cover-tags i {
+		padding: 0.25rem 0.65rem;
+		border-radius: 999px;
+		border: 1px solid var(--color-line);
+		background: rgba(10, 10, 11, 0.6);
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		font-style: normal;
+		color: var(--color-bone-dim);
+	}
+
+	/* ---------- Body ---------- */
+	.project-body {
+		display: grid;
+		gap: 1.25rem;
+		align-content: center;
+		min-width: 0;
+	}
+
+	.project-kicker {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.6rem 1rem;
+		font-family: var(--font-mono);
+		font-size: 0.74rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.project-index {
+		color: var(--color-lime);
+	}
+
+	.project-index span {
+		color: var(--color-muted);
+	}
+
+	.project-title {
+		font-size: clamp(2rem, 3.4vw + 0.5rem, 3.25rem);
+		line-height: 1.02;
+		letter-spacing: -0.04em;
+	}
+
+	.project-summary {
+		font-size: 1.15rem;
+		line-height: 1.4;
+		color: var(--color-bone);
+		font-weight: 500;
+	}
+
+	.project-desc {
+		max-width: 34rem;
+		font-size: 0.98rem;
+		line-height: 1.65;
+		color: var(--color-bone-dim);
+	}
+
+	.project-meta {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+		padding-block: 1.1rem;
+		border-block: 1px solid var(--color-line);
+	}
+
+	.project-meta dt {
+		margin-bottom: 0.25rem;
+		font-family: var(--font-mono);
+		font-size: 0.66rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.project-meta dd {
+		font-size: 0.86rem;
+		line-height: 1.35;
+		color: var(--color-bone);
+	}
+
+	.project-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+	}
+
+	.project-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+		margin-top: 0.25rem;
+	}
+
+	@media (max-width: 480px) {
+		.project-meta {
+			grid-template-columns: 1fr 1fr;
+		}
+		.project-meta div:last-child {
+			grid-column: 1 / -1;
+		}
+	}
+</style>
