@@ -1,64 +1,58 @@
 @import "tailwindcss";
 
+/*
+  Light, print-inspired system: a cool paper ground framed in white, navy ink instead of black,
+  one ultramarine "line" colour for everything interactive, a pale periwinkle "fill" for hatching
+  and offset shapes, and a small vermilion accent reserved for the full stop and heading rules.
+*/
 @theme {
-  /* Surfaces: a ladder of near-blacks separated by 1px borders instead of shadows. */
-  --color-ink: #0a0a0b;
-  --color-ink-soft: #0e0e10;
-  --color-panel: #111113;
-  --color-panel-2: #17171a;
-  --color-line: rgba(255, 255, 255, 0.09);
-  --color-line-strong: rgba(255, 255, 255, 0.18);
+  --color-paper: #f4f6fb;
+  --color-frame: #ffffff;
+  --color-ink: #111a3a;
+  --color-ink-2: #3a4366;
+  --color-muted: #5c6480;
+  --color-line: #3b37e3;
+  --color-line-deep: #2a26b8;
+  --color-fill: #d9dffb;
+  --color-accent: #e8531f;
+  --color-hair: rgba(17, 26, 58, 0.16);
 
-  /* Text tiers, contrast on --color-ink: 18.1:1, 7.7:1, 5.8:1. */
-  --color-bone: #f5f5f4;
-  --color-bone-dim: #a1a1aa;
-  --color-muted: #8a8a93;
+  --font-display: "Newsreader Variable", "Iowan Old Style", Georgia, serif;
+  --font-body: "Geist Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
 
-  /* The only accent. */
-  --color-lime: #c6f432;
-  --color-error: #ff9b8a;
-
-  --font-display: "Geist Variable", "Segoe UI", system-ui, sans-serif;
-  --font-hero: "Bricolage Grotesque Variable", "Geist Variable", system-ui, sans-serif;
-  --font-body: "Geist Variable", "Segoe UI", system-ui, sans-serif;
-  --font-mono: "Geist Mono Variable", ui-monospace, "Cascadia Code", Menlo, monospace;
-
-  --ease-premium: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-snap: cubic-bezier(0.65, 0, 0.35, 1);
-
-  /* Three radii only. */
-  --radius-control: 0.5rem;
-  --radius-card: 1rem;
+  --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-soft: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ease-over: cubic-bezier(0.175, 0.885, 0.32, 1.3);
 }
 
-/*
-  Page ground. Deliberately outside @layer: unlayered rules outrank layered ones, so no host
-  reset (a preview shell, injected extension styles) can repaint the page or swap its fonts.
-*/
+/* Page ground. Outside @layer so no injected reset can repaint it. */
 :root {
-  background: var(--color-ink);
-  color-scheme: dark;
+  --frame: 14px;
+  background: var(--color-frame);
+  color-scheme: light;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --frame: 8px;
+  }
 }
 
 :root body {
   margin: 0;
-  background: var(--color-ink);
-  color: var(--color-bone);
+  padding: var(--frame);
+  background: var(--color-frame);
+  color: var(--color-ink-2);
   font-family: var(--font-body);
   font-size: 1.0625rem;
-  line-height: 1.55;
+  line-height: 1.65;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: calc(4.5rem + env(safe-area-inset-top, 0px));
-    scrollbar-gutter: stable;
+    scroll-padding-top: calc(5.5rem + var(--frame));
     -webkit-text-size-adjust: 100%;
-  }
-
-  html.lenis {
-    scroll-behavior: auto;
   }
 
   body {
@@ -68,11 +62,10 @@
     overflow-x: clip;
   }
 
-  a,
-  button,
-  summary,
-  label {
-    -webkit-tap-highlight-color: transparent;
+  @media (min-width: 768px) {
+    body {
+      font-size: 1.125rem;
+    }
   }
 
   h1,
@@ -80,282 +73,292 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.035em;
+    font-weight: 400;
+    color: var(--color-ink);
+    letter-spacing: -0.012em;
     text-wrap: balance;
+  }
+
+  h1 b,
+  h2 b,
+  h3 b {
+    font-weight: 700;
   }
 
   p {
     text-wrap: pretty;
   }
 
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   ::selection {
-    background: var(--color-lime);
-    color: var(--color-ink);
+    background: var(--color-line);
+    color: #fff;
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-lime);
+    outline: 2px solid var(--color-line);
     outline-offset: 3px;
-  }
-
-  [hidden] {
-    display: none !important;
+    border-radius: 4px;
   }
 
   [tabindex='-1']:focus {
     outline: none;
   }
+
+  [hidden] {
+    display: none !important;
+  }
 }
 
 @layer components {
+  /* The paper sheet inside the white passe-partout frame. */
+  .sheet {
+    position: relative;
+    background: var(--color-paper);
+    min-height: calc(100svh - 2 * var(--frame));
+    /* Entrance transforms (the accent-rule comet, offset shapes) must never widen the page. */
+    overflow-x: clip;
+  }
+
+  /* Fixed white passe-partout, so the frame holds while the page scrolls under it. */
+  .frame {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    border: var(--frame) solid var(--color-frame);
+    pointer-events: none;
+  }
+
   .container-page {
     --gutter: 1.25rem;
     width: 100%;
-    max-width: 1280px;
+    max-width: 1200px;
     margin-inline: auto;
-    padding-left: max(var(--gutter), env(safe-area-inset-left));
-    padding-right: max(var(--gutter), env(safe-area-inset-right));
+    padding-inline: var(--gutter);
   }
 
   @media (min-width: 768px) {
     .container-page {
-      --gutter: 2rem;
+      --gutter: 2.5rem;
     }
   }
 
   @media (min-width: 1280px) {
     .container-page {
-      --gutter: 3rem;
+      --gutter: 3.75rem;
     }
   }
 
   .section {
-    padding-block: clamp(5rem, 10vw, 9rem);
+    padding-block: clamp(6rem, 14vw, 12rem) 0;
   }
 
-  /* Mono label: "01 / Selected work". The number carries the accent. */
-  .eyebrow {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-muted);
-  }
-
-  .eyebrow b {
-    font-weight: 500;
-    color: var(--color-lime);
-  }
-
-  /* Label in columns 1-3, content in 4-12 on desktop; stacked on phones. */
-  .section-head {
-    display: grid;
-    gap: 1.5rem;
-    margin-bottom: clamp(3rem, 7vw, 5rem);
-  }
-
-  @media (min-width: 1024px) {
-    .section-head {
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: 1.5rem;
-    }
-
-    .section-head > .eyebrow {
-      grid-column: 1 / span 3;
-      padding-top: 0.9rem;
-    }
-
-    .section-head > :not(.eyebrow) {
-      grid-column: 4 / span 9;
-    }
-  }
-
-  .section-title {
-    max-width: 18ch;
-    font-family: var(--font-display);
-    font-size: clamp(2.25rem, 4.6vw + 0.5rem, 4.5rem);
-    line-height: 1.04;
-    letter-spacing: -0.04em;
+  /* Tracked uppercase label (nav, kickers, table labels). */
+  .label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
     font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-ink);
   }
 
-  .section-title em {
-    font-style: normal;
-    color: var(--color-lime);
+  .h-section {
+    font-size: clamp(2.4rem, 4.4vw + 0.6rem, 4.25rem);
+    line-height: 1.06;
   }
 
-  /* ---------- Buttons: fill sweep + text roll + magnetic (scripts/pointer-fx.ts) ---------- */
+  .h-sub {
+    font-size: clamp(1.75rem, 2vw + 0.9rem, 2.4rem);
+    line-height: 1.12;
+  }
+
+  .lede {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 0.9vw + 1rem, 1.55rem);
+    line-height: 1.5;
+    color: var(--color-ink);
+  }
+
+  .lede b {
+    font-weight: 700;
+  }
+
+  /* The coloured full stop that ends every heading. */
+  .dot {
+    color: var(--color-accent);
+  }
+
+  /*
+    80×3 accent rule under section headings; it "shoots in" from the right on reveal. The visible bar
+    is a pseudo-element so the observed element itself never moves off-screen (which would stop the
+    IntersectionObserver from ever seeing it on narrow phones).
+  */
+  .rule {
+    position: relative;
+    display: block;
+    width: 5rem;
+    height: 3px;
+    margin-block: 1.75rem 2.5rem;
+  }
+
+  .rule::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 3px;
+    background: var(--color-accent);
+  }
+
+  .measure {
+    max-width: 38rem;
+  }
+
+  .copy > * + * {
+    margin-top: 1.25rem;
+  }
+
+  /* Inline link: bold ink with a fat periwinkle underline that floods on hover. */
+  .ilink {
+    color: var(--color-ink);
+    font-weight: 600;
+    background-image: linear-gradient(var(--color-fill), var(--color-fill));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% 0.2em;
+    transition: background-size 0.3s var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .ilink:hover {
+      background-size: 100% 100%;
+    }
+  }
+
+  /* ---------- Outline button with a hatched inset that floods solid on hover ---------- */
   .btn {
-    --mx: 0px;
-    --my: 0px;
-    --s: 1;
+    --dx: 0px;
+    --dy: 0px;
     position: relative;
     isolation: isolate;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.6rem;
-    min-height: 3rem;
-    padding-inline: 1.5rem;
-    border-radius: 999px;
-    overflow: hidden;
-    font-weight: 500;
-    font-size: 0.95rem;
-    line-height: 1;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.6rem;
+    border: 2px solid var(--color-line);
+    border-radius: 10px;
+    color: var(--color-line);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.2;
     white-space: nowrap;
     cursor: pointer;
-    user-select: none;
-    transform: translate3d(var(--mx), var(--my), 0) scale(var(--s));
     transition:
-      transform 0.5s var(--ease-premium),
-      color 0.3s var(--ease-premium),
-      border-color 0.3s var(--ease-premium);
+      color 0.2s ease,
+      transform 0.2s var(--ease-out);
   }
 
   .btn::before {
     content: '';
     position: absolute;
-    inset: 0;
+    inset: 4px;
     z-index: -1;
-    border-radius: inherit;
-    transform: translate3d(0, 101%, 0);
-    transition: transform 0.5s var(--ease-premium);
-  }
-
-  .btn-roll {
-    display: block;
-    height: 1.2em;
-    overflow: hidden;
-  }
-
-  .btn-roll-inner {
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.5s var(--ease-premium);
-  }
-
-  .btn-roll-inner > span {
-    display: block;
-    line-height: 1.2em;
-  }
-
-  .btn-icon {
-    flex-shrink: 0;
-    transition: transform 0.5s var(--ease-premium);
+    border-radius: 6px;
+    background-image: repeating-linear-gradient(-45deg, var(--color-fill) 0 2px, transparent 2px 7px);
+    transform: translate3d(var(--dx), var(--dy), 0);
+    transition:
+      transform 1.5s ease-out,
+      background-color 0.15s ease;
   }
 
   @media (hover: hover) and (pointer: fine) {
     .btn:hover::before {
-      transform: translate3d(0, 0, 0);
+      background-color: var(--color-fill);
     }
+  }
 
-    .btn:hover .btn-roll-inner {
-      transform: translate3d(0, -50%, 0);
-    }
+  .btn:active {
+    transform: scale(0.97);
+    transition-duration: 0.1s;
+  }
 
+  .btn-icon {
+    flex-shrink: 0;
+    transition: transform 0.25s var(--ease-out);
+  }
+
+  @media (hover: hover) {
     .btn:hover .btn-icon {
       transform: translate3d(2px, -2px, 0);
     }
   }
 
-  .btn:active {
-    --s: 0.97;
-    transition-duration: 0.12s;
+  .btn-sm {
+    min-height: 2.75rem;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.9rem;
   }
 
-  .btn-primary {
-    background: var(--color-lime);
+  /* Text link with an arrow, used next to buttons. */
+  .tlink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    font-weight: 600;
     color: var(--color-ink);
   }
 
-  .btn-primary::before {
-    background: var(--color-bone);
-  }
-
-  .btn-ghost {
-    color: var(--color-bone);
-    border: 1px solid var(--color-line-strong);
-  }
-
-  .btn-ghost::before {
-    background: var(--color-bone);
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .btn-ghost:hover {
-      color: var(--color-ink);
-      border-color: var(--color-bone);
-    }
-  }
-
-  .btn-sm {
-    min-height: 2.75rem;
-    padding-inline: 1.15rem;
-    font-size: 0.86rem;
-  }
-
-  .btn-lg {
-    min-height: 3.25rem;
-    padding-inline: 1.75rem;
-    font-size: 1rem;
-  }
-
-  /* ---------- Text links ---------- */
-  .link-line {
-    position: relative;
-  }
-
-  .link-line::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -4px;
-    height: 1px;
-    background: currentColor;
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.4s var(--ease-premium);
-  }
-
-  .link-line[aria-current='true']::after {
-    transform: scaleX(1);
-    transform-origin: left;
+  .tlink span {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1.5px;
+    transition: background-size 0.35s var(--ease-out);
   }
 
   @media (hover: hover) {
-    .link-line:hover::after {
-      transform: scaleX(1);
-      transform-origin: left;
+    .tlink:hover span {
+      background-size: 100% 1.5px;
     }
   }
 
-  .tag {
-    display: inline-flex;
-    align-items: center;
-    min-height: 1.9rem;
-    padding: 0.2rem 0.75rem;
-    border-radius: 999px;
-    border: 1px solid var(--color-line);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.02em;
-    color: var(--color-bone-dim);
-    white-space: nowrap;
+  /* Patterned decoration layers (offset "misregistered print" shapes behind images and icons). */
+  .hatch {
+    background-image: repeating-linear-gradient(-45deg, var(--color-fill) 0 2px, transparent 2px 8px);
   }
 
-  /* ---------- Scroll reveal (scripts/reveal.ts). Gated on .js so content never hides without JS. ---------- */
+  .dots {
+    background-image: radial-gradient(var(--color-fill) 1.6px, transparent 1.8px);
+    background-size: 12px 12px;
+  }
+
+  /* Pointer drift (scripts/drift.ts): decoration only, never text. */
+  [data-drift] {
+    --dx: 0px;
+    --dy: 0px;
+    transform: translate3d(var(--dx), var(--dy), 0);
+    transition: transform 1.5s ease-out;
+  }
+
+  .hairline {
+    border: 0;
+    border-top: 1px solid var(--color-hair);
+  }
+
+  /* ---------- Scroll reveal (scripts/reveal.ts). Gated on .js so nothing hides without JS. ---------- */
   .js [data-reveal] {
     opacity: 0;
-    transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 10px, 0);
     transition:
-      opacity 0.7s var(--ease-premium),
-      transform 0.9s var(--ease-premium);
+      opacity 0.8s var(--ease-out),
+      transform 0.8s var(--ease-out);
     transition-delay: var(--reveal-delay, 0ms);
   }
 
@@ -364,128 +367,60 @@
     transform: none;
   }
 
-  /*
-    Clip/line reveals animate an INNER element: IntersectionObserver measures the visible
-    (clipped) area of its target, so a fully-clipped target would never register as in view.
-  */
-  .js [data-reveal='clip'],
-  .js [data-reveal='line'] {
+  .js [data-reveal='rule'] {
     opacity: 1;
     transform: none;
   }
 
-  .js [data-reveal='clip'] > .reveal-inner {
-    display: block;
-    translate: 0 0.25em;
-    clip-path: inset(100% -5% -20% -5%);
-    transition:
-      clip-path 0.9s var(--ease-premium),
-      translate 0.9s var(--ease-premium);
-    transition-delay: var(--reveal-delay, 0ms);
-  }
-
-  .js [data-reveal='clip'].is-in > .reveal-inner {
-    translate: 0 0;
-    clip-path: inset(-20% -5% -20% -5%);
-  }
-
-  .js [data-reveal='line'] > .reveal-inner {
-    display: block;
-    height: 100%;
-    transform: scaleX(0);
+  .js [data-reveal='rule']::before {
+    transform: translate3d(500%, 0, 0) scaleX(5);
     transform-origin: left;
-    transition: transform 1.2s var(--ease-premium);
-    transition-delay: var(--reveal-delay, 0ms);
+    transition: transform 0.35s cubic-bezier(0.45, 0.85, 0.35, 0.85);
+    transition-delay: calc(var(--reveal-delay, 0ms) + 0.2s);
   }
 
-  .js [data-reveal='line'].is-in > .reveal-inner {
-    transform: scaleX(1);
+  .js [data-reveal='rule'].is-in::before {
+    transform: none;
+  }
+
+  /* Image reveal: a periwinkle panel sweeps up off the picture while it settles from 1.08 scale. */
+  .js [data-reveal='image'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal-panel {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: var(--color-fill);
+    transform-origin: top;
+    pointer-events: none;
+  }
+
+  .js [data-reveal='image'] .reveal-panel {
+    transition: transform 0.6s var(--ease-soft);
+    transition-delay: calc(var(--reveal-delay, 0ms) + 0.1s);
+  }
+
+  .js [data-reveal='image'].is-in .reveal-panel {
+    transform: scaleY(0);
+  }
+
+  html:not(.js) .reveal-panel {
+    display: none;
   }
 
   html.scroll-locked,
   html.scroll-locked body {
     overflow: hidden;
   }
-
-  /* ---------- Pointer spotlight on cards (scripts/pointer-fx.ts) ---------- */
-  .spotlight {
-    position: relative;
-    isolation: isolate;
-  }
-
-  .spotlight::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    background: radial-gradient(
-      380px circle at var(--sx, 50%) var(--sy, 50%),
-      rgba(198, 244, 50, 0.08),
-      transparent 65%
-    );
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .spotlight:hover::after {
-      opacity: 1;
-    }
-  }
-
-  /* ---------- Film grain: one static fixed layer, 4% ---------- */
-  .grain {
-    position: fixed;
-    inset: 0;
-    z-index: 70;
-    pointer-events: none;
-    opacity: 0.04;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-    background-size: 180px 180px;
-  }
-
-  /* ---------- Scroll cue ---------- */
-  .scroll-cue-line {
-    position: relative;
-    width: 1px;
-    height: 2.5rem;
-    overflow: hidden;
-    background: var(--color-line-strong);
-  }
-
-  .scroll-cue-line::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: -45%;
-    width: 100%;
-    height: 45%;
-    background: var(--color-lime);
-    animation: scroll-cue 2.2s var(--ease-snap) infinite;
-  }
 }
 
-@keyframes scroll-cue {
-  to {
-    top: 100%;
-  }
-}
-
-@keyframes line-up {
-  from {
-    transform: translate3d(0, 108%, 0);
-  }
-  to {
-    transform: none;
-  }
-}
-
-@keyframes fade-up {
+@keyframes rise {
   from {
     opacity: 0;
-    transform: translate3d(0, 18px, 0);
+    transform: translate3d(0, 10px, 0);
   }
   to {
     opacity: 1;
@@ -493,12 +428,32 @@
   }
 }
 
-@keyframes pulse-dot {
+@keyframes grow-y {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(198, 244, 50, 0.5);
+    box-shadow: 0 0 0 0 rgba(59, 55, 227, 0.45);
   }
   100% {
-    box-shadow: 0 0 0 10px rgba(198, 244, 50, 0);
+    box-shadow: 0 0 0 9px rgba(59, 55, 227, 0);
+  }
+}
+
+@keyframes bob {
+  0%,
+  80%,
+  100% {
+    transform: none;
+  }
+  88% {
+    transform: translate3d(0, -4px, 0);
   }
 }
 
@@ -517,15 +472,17 @@
     transition-delay: 0s !important;
   }
 
-  [data-reveal],
-  [data-reveal] .reveal-inner {
+  .js [data-reveal],
+  .js [data-reveal='rule']::before {
     opacity: 1 !important;
     transform: none !important;
-    translate: none !important;
-    clip-path: none !important;
   }
 
-  .scroll-cue-line::after {
-    animation: none !important;
+  .reveal-panel {
+    display: none;
+  }
+
+  [data-drift] {
+    transform: none !important;
   }
 }

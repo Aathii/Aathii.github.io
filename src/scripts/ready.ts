@@ -1,8 +1,7 @@
 /**
- * Starts the hero choreography (`html.is-ready`) as soon as the display font (the one the big name is set in)
- * is usable, and never later than a short ceiling, so a slow font can't hold the page. The hero text itself is
- * always in the DOM (only its transform animates), which keeps LCP fast, and waiting on that one font avoids
- * the big name flashing in a fallback face.
+ * Starts the hero entrance (`html.is-ready`) as soon as the heading font is usable, and never later
+ * than a short ceiling, so the greeting never flashes in a fallback face and a slow font can't hold
+ * the page. There is no loading screen and no artificial delay.
  */
 const MAX_MS = 400;
 
@@ -13,11 +12,11 @@ export function initReady() {
 	const ready = () => {
 		if (done) return;
 		done = true;
-		// One frame so the initial (hidden) transform state is committed before it animates away.
+		// One frame so the paused first state is committed before it plays.
 		requestAnimationFrame(() => root.classList.add('is-ready'));
 	};
 
-	const heroFont = document.fonts?.load?.('700 1em "Bricolage Grotesque Variable"') ?? Promise.resolve();
-	Promise.race([heroFont, new Promise((resolve) => setTimeout(resolve, MAX_MS))]).then(ready, ready);
+	const headingFont = document.fonts?.load?.('700 1em "Newsreader Variable"') ?? Promise.resolve();
+	Promise.race([headingFont, new Promise((resolve) => setTimeout(resolve, MAX_MS))]).then(ready, ready);
 	setTimeout(ready, MAX_MS + 100);
 }

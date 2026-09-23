@@ -1,0 +1,46 @@
+---
+import { icons, type IconName } from './icons';
+
+/**
+ * Two-colour "misregistered print" icon: a periwinkle copy of the shape sits offset behind the
+ * ultramarine stroke and drifts gently with the pointer (scripts/drift.ts).
+ */
+interface Props {
+	name: IconName;
+	size?: number;
+	class?: string;
+}
+
+const { name, size = 44, class: className = '' } = Astro.props;
+---
+
+<span class={`line-icon ${className}`} style={`--s:${size}px`} aria-hidden="true">
+	<svg class="li-fill" data-drift="3 3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" set:html={icons[name]} />
+	<svg class="li-stroke" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" set:html={icons[name]} />
+</span>
+
+<style>
+	.line-icon {
+		position: relative;
+		display: inline-block;
+		width: var(--s);
+		height: var(--s);
+		flex-shrink: 0;
+	}
+
+	.line-icon svg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.li-fill {
+		color: var(--color-fill);
+		translate: 3px 3px;
+	}
+
+	.li-stroke {
+		color: var(--color-line);
+	}
+</style>

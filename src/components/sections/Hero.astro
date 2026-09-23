@@ -3,378 +3,385 @@ import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
 import { socialIcon } from '../ui/icons';
 import { mailto, site } from '../../config/site';
-import { facts } from '../../data/content';
 
-const words = site.heroName.split(/\s+/).filter(Boolean);
-const longest = Math.max(...words.map((w) => w.length), 4);
-const aside = facts.slice(0, 3);
+const scrollLetters = 'Scroll'.split('');
 ---
 
-<section id="top-hero" class="hero" data-hero-glow aria-labelledby="hero-title">
-	<div class="hero-bg" aria-hidden="true">
-		<div class="hero-glow"></div>
-		<div class="hero-grid"></div>
-	</div>
-
-	<div class="container-page hero-inner">
-		<div class="hero-top">
+<section id="top-hero" class="hero" aria-labelledby="hero-title" data-inert-when-menu>
+	<div class="container-page hero-grid">
+		<div class="hero-copy">
 			{
 				site.availability && (
-					<p class="pill hero-fade" style="--d: 0s">
-						<span class="pill-dot" aria-hidden="true" />
+					<p class="status label hero-in" style="--d: 0s">
+						<span class="status-dot" aria-hidden="true" />
 						{site.availability}
 					</p>
 				)
 			}
-			<p class="hero-year hero-fade" style="--d: 0.05s" aria-hidden="true">Portfolio &mdash; {new Date().getFullYear()}</p>
-		</div>
 
-		<h1 id="hero-title" class="hero-name" style={`--name-chars:${longest}`}>
-			<span class="sr-only">{site.name}, {site.role}</span>
-			<span aria-hidden="true" class="hero-name-lines">
-				{
-					words.map((word, i) => (
-						<span class="hero-line">
-							<span class="hero-line-inner" style={`--i:${i}`}>
-								{word}
-							</span>
-						</span>
-					))
-				}
-			</span>
-		</h1>
+			<h1 id="hero-title" class="hero-title hero-in" style="--d: 0.08s">
+				Hi, I'm <b>{site.firstName}</b><span class="dot">.</span>
+			</h1>
 
-		<div class="hero-bottom">
-			<div class="hero-copy">
-				<p class="hero-role hero-fade" style="--d: 0.12s"><span aria-hidden="true">/</span> {site.name} · {site.role}</p>
-				<p class="hero-headline hero-fade" style="--d: 0.16s">{site.headline}</p>
-				<div class="hero-ctas hero-fade" style="--d: 0.26s">
-					<Button href="#work" size="lg" icon="arrowDown">See my work</Button>
-					<Button href={mailto()} size="lg" variant="ghost" icon="arrowUpRight">Get in touch</Button>
-				</div>
-				<ul class="hero-links hero-fade" style="--d: 0.34s" aria-label="Elsewhere">
-					{
-						site.socials.map((s) => (
-							<li>
-								<a href={s.url} target="_blank" rel="noopener noreferrer" class="hero-link">
-									<Icon name={socialIcon(s.label)} size={16} />
-									{s.label}
-								</a>
-							</li>
-						))
-					}
-					{
-						site.resumeUrl && (
-							<li>
-								<a href={site.resumeUrl} download class="hero-link">
-									<Icon name="download" size={16} />
-									Résumé
-								</a>
-							</li>
-						)
-					}
-				</ul>
+			<p class="lede hero-lede hero-in" style="--d: 0.3s">
+				A <b>developer and co-founder</b> who also works in sales, so I build with the customer in mind.
+			</p>
+
+			<div class="hero-actions hero-in" style="--d: 0.45s">
+				<Button href="#work" icon="arrowDown">See my work</Button>
+				<a href={mailto()} class="tlink"><span>Email me</span> <Icon name="arrowUpRight" size={16} /></a>
 			</div>
 
-			<dl class="hero-aside hero-fade" style="--d: 0.34s">
+			<ul class="hero-social hero-in" style="--d: 0.55s" aria-label="Elsewhere">
 				{
-					aside.map((f) => (
-						<div>
-							<dt>{f.label}</dt>
-							<dd>{f.value}</dd>
-						</div>
+					site.socials.map((s) => (
+						<li>
+							<a href={s.url} target="_blank" rel="noopener noreferrer" class="social-link">
+								<Icon name={socialIcon(s.label)} size={16} />
+								<span>{s.label}</span>
+							</a>
+						</li>
 					))
 				}
-			</dl>
+				{
+					site.resumeUrl && (
+						<li>
+							<a href={site.resumeUrl} download class="social-link">
+								<Icon name="download" size={16} />
+								<span>Résumé</span>
+							</a>
+						</li>
+					)
+				}
+			</ul>
 		</div>
 
-		<div class="hero-foot hero-fade" style="--d: 0.4s" aria-hidden="true">
-			<span class="hero-foot-label">Scroll</span>
-			<span class="scroll-cue-line"></span>
-			<span class="hero-foot-label">Selected work</span>
-		</div>
+		<figure class="hero-photo">
+			<span class="photo-stack">
+				<span class="photo-hatch hatch" data-drift="-10 -8" aria-hidden="true"></span>
+				<span class="photo-dots dots" data-drift="8 10" aria-hidden="true"></span>
+				<span class="photo-frame">
+					<img
+						src={site.photo}
+						srcset={`${site.photo.replace(/\.webp$/, '-480.webp')} 480w, ${site.photo} 800w`}
+						sizes="(min-width: 1024px) 28rem, (min-width: 640px) 20rem, 58vw"
+						alt={site.photoAlt}
+						width="800"
+						height="1000"
+						fetchpriority="high"
+						decoding="async"
+					/>
+					<span class="photo-panel" aria-hidden="true"></span>
+				</span>
+			</span>
+			<figcaption class="label photo-caption">University of Toronto · Honours B.Sc.</figcaption>
+		</figure>
+	</div>
+
+	<div class="container-page scroll-cue" aria-hidden="true">
+		<span class="scroll-word label">
+			{scrollLetters.map((ch, i) => <span style={`--i:${i}`}>{ch}</span>)}
+		</span>
+		<span class="scroll-line"></span>
 	</div>
 </section>
 
 <style>
 	.hero {
-		--gx: 72%;
-		--gy: 24%;
 		position: relative;
 		display: flex;
-		min-height: 100svh;
-		overflow: clip;
+		flex-direction: column;
+		justify-content: center;
+		padding-top: 6.5rem;
+		padding-bottom: 3rem;
 	}
 
-	.hero-bg {
-		position: absolute;
-		inset: 0;
-		pointer-events: none;
-	}
-
-	/* The one glow on the page: lime, hero only, follows the pointer with a lag. */
-	.hero-glow {
-		position: absolute;
-		inset: 0;
-		background: radial-gradient(44rem circle at var(--gx) var(--gy), rgba(198, 244, 50, 0.08), transparent 62%);
+	@media (min-width: 1024px) {
+		.hero {
+			min-height: calc(100svh - 2 * var(--frame));
+			padding-top: 7rem;
+			padding-bottom: 7rem;
+		}
 	}
 
 	.hero-grid {
-		position: absolute;
-		inset: 0;
-		background-image:
-			linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-			linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-		background-size: 6rem 6rem;
-		mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 15%, transparent 75%);
-		-webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 15%, transparent 75%);
-	}
-
-	.hero-inner {
-		position: relative;
-		z-index: 1;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		gap: 2rem;
-		padding-top: calc(6rem + env(safe-area-inset-top, 0px));
-		padding-bottom: 1.75rem;
-	}
-
-	.hero-top {
-		display: flex;
-		flex-wrap: wrap;
+		display: grid;
+		gap: 2.75rem;
 		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
 	}
 
-	.pill {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.65rem;
-		padding: 0.5rem 0.95rem;
-		border-radius: 999px;
-		border: 1px solid var(--color-line);
-		background: rgba(255, 255, 255, 0.03);
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		letter-spacing: 0.02em;
-		color: var(--color-bone-dim);
-	}
-
-	.pill-dot {
-		flex-shrink: 0;
-		width: 0.5rem;
-		height: 0.5rem;
-		border-radius: 999px;
-		background: var(--color-lime);
-		animation: pulse-dot 1.8s ease-out infinite;
-	}
-
-	.hero-year {
-		display: none;
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--color-muted);
-	}
-
-	@media (min-width: 640px) {
-		.hero-year {
-			display: block;
+	@media (min-width: 1024px) {
+		.hero-grid {
+			grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+			gap: 4rem;
 		}
 	}
 
-	/* The name scales so its longest word always fits the viewport, phone to widescreen. */
-	.hero-name {
-		font-family: var(--font-hero);
-		font-size: min(11.5rem, calc((100vw - 2.5rem) / (var(--name-chars) * 0.62)));
-		font-weight: 700;
-		line-height: 0.88;
-		letter-spacing: -0.055em;
-		margin-left: -0.05em;
+	/* ---------- Copy ---------- */
+	.status {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1.75rem;
+		color: var(--color-ink-2);
 	}
 
-	.hero-name-lines {
-		display: block;
+	.status-dot {
+		width: 0.55rem;
+		height: 0.55rem;
+		border-radius: 999px;
+		background: var(--color-line);
+		animation: pulse 1.8s ease-out infinite;
 	}
 
-	.hero-line {
-		display: block;
-		overflow: hidden;
-		padding-bottom: 0.1em;
-		margin-bottom: -0.1em;
+	.hero-title {
+		font-size: clamp(3rem, 6vw + 0.75rem, 6rem);
+		line-height: 1;
+		letter-spacing: -0.02em;
 	}
 
-	.hero-line-inner {
-		display: block;
-		will-change: transform;
-	}
-
-	/* Only the transform is animated; the text is always painted at full opacity (keeps LCP fast). */
-	:global(.js:not(.is-ready)) .hero-line-inner {
-		transform: translate3d(0, 112%, 0);
-	}
-
-	:global(.is-ready) .hero-line-inner {
-		animation: line-up 1s var(--ease-premium) both;
-		animation-delay: calc(0.08s + var(--i) * 0.07s);
-	}
-
-	/* Without JS the entrance simply plays on load; with JS it waits for `is-ready` (scripts/ready.ts). */
-	.hero-fade {
-		animation: fade-up 0.8s var(--ease-premium) both;
-		animation-delay: var(--d, 0s);
-	}
-
-	:global(.js:not(.is-ready)) .hero-fade {
-		opacity: 0;
-		animation-play-state: paused;
-	}
-
-	.hero-bottom {
-		display: grid;
-		gap: 2.5rem;
-		align-items: end;
-	}
-
-	.hero-role {
-		margin-bottom: 1rem;
-		font-family: var(--font-mono);
-		font-size: 0.82rem;
-		letter-spacing: 0.06em;
-		color: var(--color-lime);
-	}
-
-	.hero-role span {
-		margin-right: 0.35rem;
-		opacity: 0.6;
-	}
-
-	.hero-headline {
-		max-width: 44ch;
-		font-family: var(--font-display);
-		font-weight: 500;
-		font-size: clamp(1.25rem, 2vw + 0.4rem, 1.75rem);
-		line-height: 1.28;
-		letter-spacing: -0.025em;
-		color: var(--color-bone);
-	}
-
-	.hero-ctas {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.65rem;
+	.hero-lede {
+		max-width: 32rem;
 		margin-top: 1.75rem;
 	}
 
-	/* Both CTAs stay on one row on the narrowest phones. */
-	@media (max-width: 479px) {
-		.hero-ctas :global(.btn) {
-			min-height: 3rem;
-			padding-inline: 1.15rem;
-		}
-	}
-
-	.hero-links {
+	.hero-actions {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem 1.5rem;
-		margin-top: 1.5rem;
+		align-items: center;
+		gap: 0.75rem 1.75rem;
+		margin-top: 2.5rem;
 	}
 
-	.hero-link {
+	.hero-social {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1.5rem;
+		margin-top: 1.75rem;
+	}
+
+	.social-link {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
 		min-height: 2.75rem;
-		font-size: 0.9rem;
-		color: var(--color-bone-dim);
-		transition: color 0.25s ease;
+		font-size: 0.95rem;
+		color: var(--color-ink-2);
+		transition: color 0.2s ease;
 	}
 
 	@media (hover: hover) {
-		.hero-link:hover {
-			color: var(--color-lime);
+		.social-link:hover {
+			color: var(--color-line);
 		}
 	}
 
-	.hero-aside {
-		display: none;
+	/* ---------- Photo: misregistered-print frame ---------- */
+	/* Phones: a compact portrait above the greeting so the name still lands in the first screen. */
+	.hero-photo {
+		position: relative;
+		width: min(58%, 13.5rem);
+		margin: 0 0 0.5rem;
+		justify-self: start;
+		order: -1;
 	}
 
-	.hero-foot {
-		display: none;
-		align-items: center;
-		justify-content: space-between;
-		padding-top: 1.25rem;
-		border-top: 1px solid var(--color-line);
-	}
-
-	.hero-foot-label {
-		font-family: var(--font-mono);
-		font-size: 0.72rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--color-muted);
-	}
-
-	@media (min-width: 768px) {
-		.hero-foot {
-			display: flex;
+	@media (min-width: 640px) {
+		.hero-photo {
+			width: min(100%, 20rem);
 		}
 	}
 
 	@media (min-width: 1024px) {
-		.hero-inner {
-			gap: 3rem;
-			padding-bottom: 2.25rem;
+		.hero-photo {
+			order: 0;
+			width: 100%;
+			max-width: 28rem;
+			justify-self: end;
+			margin: 0;
 		}
+	}
 
-		.hero-bottom {
-			grid-template-columns: repeat(12, minmax(0, 1fr));
-			column-gap: 1.5rem;
+	.photo-stack {
+		position: relative;
+		display: block;
+	}
+
+	.photo-frame {
+		position: relative;
+		z-index: 1;
+		display: block;
+		aspect-ratio: 4 / 5;
+		overflow: hidden;
+		border-radius: 14px;
+		border: 2px solid var(--color-ink);
+		background: var(--color-fill);
+	}
+
+	.photo-frame img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.photo-hatch {
+		position: absolute;
+		z-index: 0;
+		inset: 0.75rem -0.75rem -0.75rem 0.75rem;
+		border-radius: 14px;
+		background-color: var(--color-paper);
+	}
+
+	@media (min-width: 1024px) {
+		.photo-hatch {
+			inset: 1.1rem -1.1rem -1.1rem 1.1rem;
 		}
+	}
 
-		.hero-copy {
-			grid-column: 1 / span 7;
+	.photo-dots {
+		position: absolute;
+		z-index: 0;
+		width: 7rem;
+		height: 7rem;
+		left: -2.25rem;
+		top: -2.25rem;
+	}
+
+	.photo-panel {
+		position: absolute;
+		inset: 0;
+		background: var(--color-fill);
+		transform-origin: top;
+	}
+
+	.photo-caption {
+		position: relative;
+		z-index: 1;
+		display: none;
+		margin-top: 2.25rem;
+		font-size: 0.68rem;
+		color: var(--color-muted);
+	}
+
+	@media (min-width: 1024px) {
+		.photo-caption {
+			display: block;
 		}
+	}
 
-		.hero-aside {
-			grid-column: 9 / span 4;
-			display: grid;
-			gap: 1.25rem;
-			padding-left: 1.5rem;
-			border-left: 1px solid var(--color-line);
+	/* ---------- Scroll cue ---------- */
+	.scroll-cue {
+		display: none;
+	}
+
+	@media (min-width: 1024px) {
+		.scroll-cue {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.9rem;
 		}
+	}
 
-		.hero-aside dt {
-			margin-bottom: 0.2rem;
-			font-family: var(--font-mono);
-			font-size: 0.7rem;
-			letter-spacing: 0.1em;
-			text-transform: uppercase;
-			color: var(--color-muted);
+	.scroll-word {
+		display: inline-flex;
+		gap: 0.02em;
+		font-size: 0.66rem;
+		color: var(--color-muted);
+	}
+
+	.scroll-word span {
+		display: inline-block;
+		animation: bob 6s var(--ease-out) infinite;
+		animation-delay: calc(2s + var(--i) * 0.08s);
+	}
+
+	.scroll-line {
+		width: 1px;
+		height: 4.5rem;
+		margin-left: 1.25rem;
+		background: var(--color-ink);
+		opacity: 0.4;
+		transform-origin: top;
+		animation: grow-y 1.2s var(--ease-soft) both;
+		animation-delay: 0.9s;
+	}
+
+	/* ---------- Load choreography: waits for html.is-ready (scripts/ready.ts), plays on its own without JS ---------- */
+	.hero-in {
+		animation: rise 0.8s var(--ease-out) both;
+		animation-delay: var(--d, 0s);
+	}
+
+	.photo-panel {
+		animation: panel-up 0.75s var(--ease-soft) both;
+		animation-delay: 0.15s;
+	}
+
+	.photo-frame img {
+		animation: settle 1.8s cubic-bezier(0.075, 0.82, 0.165, 1) both;
+		animation-delay: 0.15s;
+	}
+
+	.photo-hatch {
+		animation: slide-in 1.1s var(--ease-soft) both;
+		animation-delay: 0.45s;
+	}
+
+	.photo-dots {
+		animation: rise 1s var(--ease-out) both;
+		animation-delay: 0.65s;
+	}
+
+	:global(.js:not(.is-ready)) .hero-in,
+	:global(.js:not(.is-ready)) .photo-panel,
+	:global(.js:not(.is-ready)) .photo-frame img,
+	:global(.js:not(.is-ready)) .photo-hatch,
+	:global(.js:not(.is-ready)) .photo-dots,
+	:global(.js:not(.is-ready)) .scroll-line {
+		animation-play-state: paused;
+	}
+
+	@keyframes panel-up {
+		from {
+			transform: scaleY(1);
 		}
-
-		.hero-aside dd {
-			font-size: 0.95rem;
-			color: var(--color-bone);
+		to {
+			transform: scaleY(0);
 		}
+	}
 
+	@keyframes settle {
+		from {
+			transform: scale(1.08);
+		}
+		to {
+			transform: none;
+		}
+	}
+
+	@keyframes slide-in {
+		from {
+			opacity: 0;
+			translate: -1.1rem -1.1rem;
+		}
+		to {
+			opacity: 1;
+			translate: 0 0;
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.pill-dot {
+		.status-dot,
+		.scroll-word span {
 			animation: none;
 		}
-		:global(.js:not(.is-ready)) .hero-line-inner {
-			transform: none;
-		}
-		:global(.js:not(.is-ready)) .hero-fade {
-			opacity: 1;
+		.photo-panel {
+			display: none;
 		}
 	}
 </style>

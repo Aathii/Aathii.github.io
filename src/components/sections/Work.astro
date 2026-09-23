@@ -1,37 +1,35 @@
 ---
 import Icon from '../ui/Icon.astro';
-import ProjectCard from './ProjectCard.astro';
-import { earlierWork, projects } from '../../data/content';
-
+import ProjectRow from './ProjectRow.astro';
+import { moreWork, projects } from '../../data/content';
 ---
 
 <section id="work" class="section" aria-labelledby="work-title" data-inert-when-menu>
 	<div class="container-page">
-		<header class="section-head">
-			<p class="eyebrow" data-reveal><b>01</b> / Selected work</p>
-			<h2 id="work-title" class="section-title" data-reveal="clip">
-				<span class="reveal-inner">Things I've <em>built</em>, and shipped.</span>
-			</h2>
-		</header>
-
-		<div class="project-stack">
-			{projects.map((project, i) => <ProjectCard project={project} index={i} total={projects.length} />)}
+		<div class="measure">
+			<h2 id="work-title" class="h-section" data-reveal>Selected <b>work</b><span class="dot">.</span></h2>
+			<span class="rule" data-reveal="rule" aria-hidden="true"></span>
+			<p data-reveal style="--reveal-delay:300ms">
+				A product I'm building, a tool I made for my own sales job, the company I co-founded, and websites for small
+				businesses. Hover a screenshot to scroll through the real site.
+			</p>
 		</div>
 
-		<div class="earlier">
-			<h3 class="earlier-title" data-reveal>Earlier work &amp; experiments</h3>
-			<ul class="earlier-list">
+		<div class="projects">
+			{projects.map((project, i) => <ProjectRow project={project} index={i} />)}
+		</div>
+
+		<div class="more">
+			<h3 class="label more-title" data-reveal>More</h3>
+			<ul>
 				{
-					earlierWork.map((item) => (
+					moreWork.map((item) => (
 						<li data-reveal>
-							<a href={item.url} target="_blank" rel="noopener noreferrer" class="earlier-row">
-								<span class="earlier-year">{item.year}</span>
-								<span class="earlier-main">
-									<span class="earlier-name">{item.title}</span>
-									<span class="earlier-note">{item.note}</span>
-								</span>
-								<span class="earlier-go">
-									{item.external}
+							<a href={item.url} target="_blank" rel="noopener noreferrer" class="more-row">
+								<span class="more-name">{item.title}</span>
+								<span class="more-note">{item.note}</span>
+								<span class="more-go">
+									{item.linkLabel}
 									<Icon name="arrowUpRight" size={16} />
 								</span>
 							</a>
@@ -44,98 +42,60 @@ import { earlierWork, projects } from '../../data/content';
 </section>
 
 <style>
-	.project-stack {
-		display: grid;
-		gap: 1.5rem;
+	.projects {
+		margin-top: clamp(3.5rem, 7vw, 5.5rem);
 	}
 
-	@media (min-width: 1024px) {
-		.project-stack {
-			gap: 3.5rem;
+	.more {
+		margin-top: clamp(3.5rem, 7vw, 5rem);
+	}
+
+	.more-title {
+		margin-bottom: 1rem;
+		color: var(--color-muted);
+	}
+
+	.more-row {
+		display: grid;
+		gap: 0.25rem 2rem;
+		padding-block: 1.25rem;
+		border-bottom: 1px solid var(--color-hair);
+	}
+
+	@media (min-width: 768px) {
+		.more-row {
+			grid-template-columns: 17rem minmax(0, 1fr) auto;
+			align-items: baseline;
 		}
 	}
 
-	/* ---------- Earlier work ---------- */
-	.earlier {
-		margin-top: clamp(4.5rem, 9vw, 8rem);
-	}
-
-	.earlier-title {
-		margin-bottom: 1.5rem;
-		font-family: var(--font-mono);
-		font-size: 0.78rem;
-		font-weight: 500;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--color-muted);
-	}
-
-	.earlier-list {
-		border-top: 1px solid var(--color-line);
-	}
-
-	.earlier-row {
-		display: grid;
-		grid-template-columns: 3.5rem minmax(0, 1fr) auto;
-		align-items: center;
-		gap: 1rem;
-		padding-block: 1.5rem;
-		border-bottom: 1px solid var(--color-line);
-		transition:
-			padding 0.6s var(--ease-premium),
-			background-color 0.4s ease;
-	}
-
-	.earlier-year {
-		font-family: var(--font-mono);
-		font-size: 0.78rem;
-		color: var(--color-muted);
-	}
-
-	.earlier-main {
-		display: grid;
-		gap: 0.2rem;
-		min-width: 0;
-	}
-
-	.earlier-name {
+	.more-name {
 		font-family: var(--font-display);
-		font-weight: 600;
-		font-size: clamp(1.25rem, 2.4vw, 1.7rem);
-		letter-spacing: -0.03em;
+		font-weight: 700;
+		font-size: 1.35rem;
+		color: var(--color-ink);
 	}
 
-	.earlier-note {
-		font-size: 0.92rem;
-		color: var(--color-muted);
+	.more-note {
+		font-size: 0.98rem;
 	}
 
-	.earlier-go {
+	.more-go {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.4rem;
-		font-size: 0.85rem;
-		color: var(--color-bone-dim);
-		transition: color 0.3s ease;
+		gap: 0.35rem;
+		font-weight: 600;
+		font-size: 0.95rem;
+		color: var(--color-line);
+		transition: gap 0.25s var(--ease-out);
 	}
 
-	@media (hover: hover) and (pointer: fine) {
-		.earlier-row:hover {
-			padding-inline: 1.25rem;
-			background: rgba(244, 244, 240, 0.03);
+	@media (hover: hover) {
+		.more-row:hover .more-go {
+			gap: 0.65rem;
 		}
-
-		.earlier-row:hover .earlier-go {
-			color: var(--color-lime);
-		}
-	}
-
-	@media (max-width: 560px) {
-		.earlier-row {
-			grid-template-columns: minmax(0, 1fr) auto;
-		}
-		.earlier-year {
-			display: none;
+		.more-row:hover .more-name {
+			color: var(--color-line);
 		}
 	}
 </style>

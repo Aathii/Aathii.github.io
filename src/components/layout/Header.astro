@@ -1,65 +1,62 @@
 ---
-import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
 import { socialIcon } from '../ui/icons';
 import { mailto, nav, site } from '../../config/site';
 ---
 
 <header id="site-header" class="site-header">
-	<div class="container-page flex h-[4.5rem] items-center justify-between gap-6 md:h-20">
+	<div class="container-page header-inner">
 		<a href="#top" class="brand">
-			<span class="brand-mark" aria-hidden="true">{site.initials}</span>
+			<span class="mark" aria-hidden="true">
+				<span class="mark-fill" data-drift="4 4"></span>
+				<span class="mark-box">{site.initials}</span>
+			</span>
 			<span class="brand-name">{site.name}</span>
 		</a>
 
-		<nav class="hidden items-center gap-9 lg:flex" aria-label="Primary">
+		<nav class="nav-desktop" aria-label="Primary">
 			{
 				nav.map((item) => (
-					<a href={item.href} data-nav-link class="link-line nav-link">
+					<a href={item.href} data-nav-link class="nav-link label">
 						{item.label}
 					</a>
 				))
 			}
 		</nav>
 
-		<div class="flex items-center gap-3">
-			<Button href={mailto()} size="sm" icon="arrowUpRight" class="hidden sm:inline-flex">Get in touch</Button>
-			<button
-				id="menu-toggle"
-				type="button"
-				class="menu-toggle lg:hidden"
-				aria-expanded="false"
-				aria-controls="mobile-menu"
-				aria-label="Open menu"
-			>
-				<span class="menu-bar menu-bar-top"></span>
-				<span class="menu-bar menu-bar-bottom"></span>
+		<div class="header-actions">
+			<a href={mailto()} class="hire label">
+				<svg class="hire-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z" />
+				</svg>
+				<span>Get in touch</span>
+			</a>
+			<button id="menu-toggle" type="button" class="menu-toggle label" aria-expanded="false" aria-controls="mobile-menu">
+				<span class="menu-word" data-open>Menu</span>
+				<span class="menu-word" data-close>Close</span>
 			</button>
 		</div>
 	</div>
 </header>
 
 <div id="mobile-menu" class="mobile-menu" inert>
-	<nav class="mobile-menu-nav container-page" aria-label="Mobile">
+	<nav class="container-page mobile-nav" aria-label="Mobile">
 		<ol>
 			{
 				nav.map((item, i) => (
 					<li style={`--i:${i}`}>
-						<a href={item.href} class="mobile-link">
-							<span class="mobile-link-index">{String(i + 1).padStart(2, '0')}</span>
-							<span class="mobile-link-label">{item.label}</span>
-						</a>
+						<a href={item.href} class="mobile-link">{item.label}<span class="dot">.</span></a>
 					</li>
 				))
 			}
 		</ol>
-		<div class="mobile-menu-foot" style={`--i:${nav.length}`}>
-			<a href={mailto()} class="mobile-mail">{site.contact.email}</a>
-			<ul class="flex gap-3">
+		<div class="mobile-foot" style={`--i:${nav.length}`}>
+			<a href={mailto()} class="ilink">{site.contact.email}</a>
+			<ul class="flex gap-2">
 				{
 					site.socials.map((s) => (
 						<li>
-							<a href={s.url} target="_blank" rel="noopener noreferrer" class="mobile-social" aria-label={`${s.label} (opens in a new tab)`}>
+							<a href={s.url} target="_blank" rel="noopener noreferrer" class="social-round" aria-label={`${s.label} (opens in a new tab)`}>
 								<Icon name={socialIcon(s.label)} size={20} />
 							</a>
 						</li>
@@ -73,52 +70,86 @@ import { mailto, nav, site } from '../../config/site';
 <style>
 	.site-header {
 		position: fixed;
-		inset: 0 0 auto 0;
+		top: var(--frame);
+		left: var(--frame);
+		right: var(--frame);
 		z-index: 50;
-		padding-top: env(safe-area-inset-top, 0px);
-		border-bottom: 1px solid transparent;
 		transition:
-			transform 0.6s var(--ease-premium),
-			background-color 0.4s ease,
-			border-color 0.4s ease,
-			backdrop-filter 0.4s ease;
+			background-color 0.35s ease,
+			box-shadow 0.35s ease;
 	}
 
 	.site-header.is-scrolled {
-		background: rgba(10, 10, 11, 0.6);
-		-webkit-backdrop-filter: blur(12px) saturate(1.4);
-		backdrop-filter: blur(12px) saturate(1.4);
-		border-bottom-color: var(--color-line);
+		background: rgba(244, 246, 251, 0.9);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		box-shadow: 0 1px 0 var(--color-hair);
 	}
 
-	.site-header.is-hidden {
-		transform: translate3d(0, -101%, 0);
+	:global(body.menu-open) .site-header {
+		background: transparent;
+		box-shadow: none;
+		backdrop-filter: none;
+	}
+
+	.header-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		height: 4.5rem;
+	}
+
+	@media (min-width: 768px) {
+		.header-inner {
+			height: 5.25rem;
+		}
 	}
 
 	.brand {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.75rem;
-		font-family: var(--font-display);
-		font-weight: 600;
-		letter-spacing: -0.02em;
+		gap: 0.9rem;
+		color: var(--color-ink);
 	}
 
-	.brand-mark {
+	/* Monogram: an outlined tile with a flat periwinkle copy offset behind it. */
+	.mark {
+		position: relative;
+		width: 2.6rem;
+		height: 2.6rem;
+		flex-shrink: 0;
+	}
+
+	.mark-fill,
+	.mark-box {
+		position: absolute;
+		inset: 0;
+		border-radius: 9px;
+	}
+
+	.mark-fill {
+		background: var(--color-fill);
+		translate: 4px 4px;
+	}
+
+	.mark-box {
 		display: grid;
 		place-items: center;
-		width: 2.5rem;
-		height: 2.5rem;
-		border-radius: 0.6rem;
-		background: var(--color-lime);
-		color: var(--color-ink);
-		font-size: 0.95rem;
-		letter-spacing: -0.04em;
-		transition: transform 0.6s var(--ease-premium);
+		border: 2px solid var(--color-line);
+		background: var(--color-paper);
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1.05rem;
+		letter-spacing: -0.02em;
+		color: var(--color-line);
+		transition: transform 0.4s var(--ease-over);
 	}
 
-	.brand:hover .brand-mark {
-		transform: rotate(-8deg) scale(1.05);
+	@media (hover: hover) {
+		.brand:hover .mark-box {
+			transform: rotate(-6deg);
+		}
 	}
 
 	/* Visually hidden on phones (the monogram carries the brand) but always the link's accessible name. */
@@ -129,7 +160,11 @@ import { mailto, nav, site } from '../../config/site';
 		overflow: hidden;
 		clip-path: inset(50%);
 		white-space: nowrap;
-		font-size: 1rem;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 1.1rem;
+		padding-left: 0.9rem;
+		border-left: 1px solid var(--color-hair);
 	}
 
 	@media (min-width: 640px) {
@@ -142,157 +177,218 @@ import { mailto, nav, site } from '../../config/site';
 		}
 	}
 
+	.nav-desktop {
+		display: none;
+		gap: 2.25rem;
+	}
+
+	@media (min-width: 1024px) {
+		.nav-desktop {
+			display: flex;
+		}
+	}
+
+	/* Tracked caps; the tracking opens up on hover. */
 	.nav-link {
-		font-size: 0.92rem;
-		font-weight: 500;
-		color: var(--color-bone-dim);
-		transition: color 0.3s ease;
+		position: relative;
+		padding-block: 0.6rem;
+		transition:
+			letter-spacing 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+			color 0.2s ease;
 	}
 
-	.nav-link:hover,
-	.nav-link[aria-current='true'] {
-		color: var(--color-bone);
+	.nav-link::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: 0.2rem;
+		width: 100%;
+		height: 2px;
+		background: var(--color-accent);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.3s var(--ease-out);
 	}
 
-	/* Hamburger morphs into a cross. */
+	@media (hover: hover) {
+		.nav-link:hover {
+			letter-spacing: 0.3em;
+		}
+	}
+
+	.nav-link[aria-current='true']::after {
+		transform: scaleX(1);
+	}
+
+	.header-actions {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+	}
+
+	.hire {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		min-height: 2.75rem;
+		color: var(--color-ink);
+		transition: letter-spacing 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	}
+
+	.hire-icon {
+		color: var(--color-line);
+		transition: transform 0.35s var(--ease-over);
+	}
+
+	@media (hover: hover) {
+		.hire:hover {
+			letter-spacing: 0.3em;
+		}
+		.hire:hover .hire-icon {
+			transform: rotate(-10deg) scale(1.1);
+		}
+	}
+
+	/* Icon-only on small phones, but the words stay available to screen readers. */
+	@media (max-width: 479px) {
+		.hire span {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+	}
+
+	/* MENU / CLOSE flip. */
 	.menu-toggle {
 		position: relative;
-		width: 2.75rem;
-		height: 2.75rem;
-		border-radius: 999px;
-		border: 1px solid var(--color-line);
-		background: rgba(244, 244, 240, 0.04);
+		display: grid;
+		min-width: 3.75rem;
+		min-height: 2.75rem;
+		overflow: hidden;
+		padding-left: 1.25rem;
+		border-left: 1px solid var(--color-hair);
+		text-align: left;
+		cursor: pointer;
 	}
 
-	.menu-bar {
-		position: absolute;
-		left: 50%;
-		width: 1.1rem;
-		height: 1.5px;
-		margin-left: -0.55rem;
-		background: var(--color-bone);
+	.menu-word {
+		grid-area: 1 / 1;
+		align-self: center;
 		transition:
-			transform 0.55s var(--ease-premium),
-			top 0.55s var(--ease-premium);
+			transform 0.45s var(--ease-over),
+			opacity 0.3s ease;
 	}
 
-	.menu-bar-top {
-		top: calc(50% - 4px);
+	.menu-word[data-close] {
+		transform: translate3d(0, 120%, 0);
+		opacity: 0;
 	}
 
-	.menu-bar-bottom {
-		top: calc(50% + 3px);
+	.menu-toggle[aria-expanded='true'] .menu-word[data-open] {
+		transform: translate3d(0, -120%, 0);
+		opacity: 0;
 	}
 
-	.menu-toggle[aria-expanded='true'] .menu-bar-top {
-		top: calc(50% - 0.75px);
-		transform: rotate(45deg);
+	.menu-toggle[aria-expanded='true'] .menu-word[data-close] {
+		transform: none;
+		opacity: 1;
 	}
 
-	.menu-toggle[aria-expanded='true'] .menu-bar-bottom {
-		top: calc(50% - 0.75px);
-		transform: rotate(-45deg);
+	@media (min-width: 1024px) {
+		.menu-toggle {
+			display: none;
+		}
 	}
 
-	/* ---------- Full-screen mobile menu ---------- */
+	/* ---------- Full-screen colour-wipe menu ---------- */
 	.mobile-menu {
 		position: fixed;
-		inset: 0;
+		inset: var(--frame);
 		z-index: 45;
 		display: flex;
-		align-items: stretch;
-		background: var(--color-ink);
-		clip-path: inset(0 0 100% 0);
+		background: var(--color-fill);
+		transform: translate3d(0, -101%, 0);
 		visibility: hidden;
 		transition:
-			clip-path 0.8s var(--ease-premium),
-			visibility 0s linear 0.8s;
+			transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1),
+			visibility 0s linear 0.7s;
 	}
 
 	.mobile-menu.is-open {
-		clip-path: inset(0 0 0 0);
+		transform: none;
 		visibility: visible;
 		transition:
-			clip-path 0.8s var(--ease-premium),
+			transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1),
 			visibility 0s;
 	}
 
-	.mobile-menu-nav {
+	.mobile-nav {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		padding-top: 6.5rem;
-		padding-bottom: max(2rem, env(safe-area-inset-bottom));
+		padding-top: 7rem;
+		padding-bottom: 2rem;
 	}
 
-	.mobile-menu ol {
+	.mobile-nav ol {
 		display: grid;
-		gap: 0.25rem;
+		gap: 0.35rem;
 	}
 
 	.mobile-link {
-		display: flex;
-		align-items: baseline;
-		gap: 1rem;
-		padding-block: 0.4rem;
+		display: inline-block;
+		padding-block: 0.3rem;
 		font-family: var(--font-display);
-		font-weight: 600;
-		font-size: clamp(2.6rem, 12vw, 4.5rem);
-		line-height: 1.05;
-		letter-spacing: -0.04em;
-		color: var(--color-bone);
-	}
-
-	.mobile-link-index {
-		font-family: var(--font-mono);
-		font-weight: 400;
-		font-size: 0.8rem;
-		letter-spacing: 0.06em;
-		color: var(--color-lime);
+		font-weight: 700;
+		font-size: clamp(2.6rem, 11vw, 4.25rem);
+		line-height: 1.1;
+		letter-spacing: -0.015em;
+		color: var(--color-ink);
 	}
 
 	.mobile-menu li,
-	.mobile-menu-foot {
+	.mobile-foot {
 		opacity: 0;
-		transform: translate3d(0, 28px, 0);
+		transform: translate3d(0, 14px, 0);
 		transition:
-			opacity 0.4s ease,
-			transform 0.4s ease;
+			opacity 0.25s ease,
+			transform 0.25s ease;
 	}
 
 	.mobile-menu.is-open li,
-	.mobile-menu.is-open .mobile-menu-foot {
+	.mobile-menu.is-open .mobile-foot {
 		opacity: 1;
 		transform: none;
 		transition:
-			opacity 0.8s var(--ease-premium) calc(0.18s + var(--i) * 0.07s),
-			transform 0.9s var(--ease-premium) calc(0.18s + var(--i) * 0.07s);
+			opacity 0.6s var(--ease-out) calc(0.35s + var(--i) * 0.08s),
+			transform 0.6s var(--ease-out) calc(0.35s + var(--i) * 0.08s);
 	}
 
-	.mobile-menu-foot {
+	.mobile-foot {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
 		padding-top: 1.5rem;
-		border-top: 1px solid var(--color-line);
+		border-top: 1px solid var(--color-hair);
 	}
 
-	.mobile-mail {
-		font-family: var(--font-mono);
-		font-size: 0.85rem;
-		color: var(--color-bone-dim);
-		overflow-wrap: anywhere;
+	.mobile-foot .ilink {
+		background-image: linear-gradient(var(--color-paper), var(--color-paper));
 	}
 
-	.mobile-social {
+	.social-round {
 		display: grid;
 		place-items: center;
 		width: 2.75rem;
 		height: 2.75rem;
 		border-radius: 999px;
-		border: 1px solid var(--color-line);
-		color: var(--color-bone);
+		border: 2px solid var(--color-ink);
+		color: var(--color-ink);
 	}
 
 	@media (min-width: 1024px) {

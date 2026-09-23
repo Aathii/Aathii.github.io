@@ -1,48 +1,35 @@
 ---
-import Icon from '../ui/Icon.astro';
-import { socialIcon } from '../ui/icons';
-import { nav, site } from '../../config/site';
+import { site } from '../../config/site';
 
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-line" data-inert-when-menu>
-	<div class="container-page flex flex-col gap-10 py-12 md:flex-row md:items-end md:justify-between md:py-14">
-		<div class="grid gap-4">
-			<p class="font-display text-2xl font-semibold tracking-tight">{site.name}</p>
-			<p class="max-w-xs text-sm text-muted">{[site.role, site.location].filter(Boolean).join(" · ")}</p>
-		</div>
-
-		<nav aria-label="Footer" class="flex flex-wrap gap-x-6 text-sm text-bone-dim">
-			{
-				nav.map((item) => (
-					<a href={item.href} class="inline-flex min-h-11 items-center transition-colors hover:text-bone">
-						{item.label}
-					</a>
-				))
-			}
-		</nav>
-
-		<div class="flex items-center gap-3">
-			{
-				site.socials.map((s) => (
-					<a
-						href={s.url}
-						target="_blank"
-						rel="noopener noreferrer"
-						aria-label={`${s.label} (opens in a new tab)`}
-						class="grid size-11 place-items-center rounded-full border border-line text-bone-dim transition-colors hover:border-lime hover:text-lime"
-					>
-						<Icon name={socialIcon(s.label)} size={19} />
-					</a>
-				))
-			}
-		</div>
-	</div>
-	<div class="border-t border-line">
-		<div class="container-page flex flex-col gap-2 py-6 font-mono text-xs text-muted sm:flex-row sm:justify-between">
-			<p>&copy; {year} {site.name} &middot; Built with Astro</p>
-			<a href="#top" class="inline-flex min-h-11 w-fit items-center transition-colors hover:text-bone">Back to top &uarr;</a>
-		</div>
+<footer class="footer" data-inert-when-menu>
+	<div class="container-page footer-inner">
+		<p>&copy; {year} {site.name}</p>
+		<p class="footer-mid">Designed and built by me with Astro.</p>
+		<a href="#top" class="tlink"><span>Back to top</span> &uarr;</a>
 	</div>
 </footer>
+
+<style>
+	.footer {
+		margin-top: clamp(5rem, 10vw, 8rem);
+		border-top: 1px solid var(--color-hair);
+	}
+
+	.footer-inner {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem 2rem;
+		padding-block: 1.75rem;
+		font-size: 0.9rem;
+		color: var(--color-muted);
+	}
+
+	.footer-inner .tlink {
+		font-size: 0.9rem;
+	}
+</style>

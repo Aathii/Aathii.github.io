@@ -1,6 +1,5 @@
 /**
  * Everything personal lives here and in src/data/content.ts.
- * Anything in [square brackets] is still a placeholder: replace it before going live.
  */
 
 export const site = {
@@ -12,32 +11,26 @@ export const site = {
 
   /** Full name as it appears in the header, footer, metadata and contact section. */
   name: 'Aathii Rakurakavan',
-  /** Big hero word. Keep it to one or two short words so it fits on a phone. */
-  heroName: 'Aathii',
+  /** The bold word in the hero greeting. */
+  firstName: 'Aathii',
   /** Two letters for the header mark and the favicon. */
   initials: 'AR',
-  role: 'Developer & Designer',
-  /** One line under the hero name. */
-  headline:
-    'I build software and websites that feel considered, from a cross-platform fitness app to premium sites for local businesses.',
+  role: 'Developer, co-founder and membership advisor',
   description:
-    'Aathii Rakurakavan is a developer and designer building full-stack apps and premium websites. Selected projects, live sites and how to get in touch.',
+    'Aathii Rakurakavan builds apps and websites, co-founded EverSeasons Co, and works in sales as a membership advisor at Fitness Connection. Selected work, experience and contact.',
   /** Shown in structured data (search results). */
   education: 'University of Toronto',
-  /** Leave empty to hide. */
-  location: '',
 
-  /** Shown as a pill in the hero. Set to null to hide it. */
-  availability: 'Open to internships and new opportunities',
+  /** Small status line above the hero greeting. Set to '' to hide it. */
+  availability: 'Open to new opportunities',
 
   contact: {
     email: 'aathiir03@gmail.com',
-    /** Optional, e.g. '+1 416 555 0100'. Leave empty to hide. */
-    phone: '',
   },
 
-  /** Portrait for the About section, processed by tools/process-photo.mjs. Empty shows a monogram card. */
+  /** Portrait for the hero, processed by tools/process-photo.mjs. */
   photo: '/portrait.webp',
+  photoAlt: 'Aathii at the University of Toronto convocation, holding an Honours Bachelor of Science diploma',
 
   /** Put the file in /public and point at it (e.g. '/resume.pdf'). Empty hides every résumé button. */
   resumeUrl: '',
@@ -50,10 +43,9 @@ export const site = {
 };
 
 export const nav = [
-  { label: 'Work', href: '#work' },
   { label: 'About', href: '#about' },
+  { label: 'Work', href: '#work' },
   { label: 'Experience', href: '#experience' },
-  { label: 'Skills', href: '#skills' },
   { label: 'Contact', href: '#contact' },
 ];
 

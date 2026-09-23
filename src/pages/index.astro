@@ -2,11 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import MobileCta from '../components/layout/MobileCta.astro';
 import Hero from '../components/sections/Hero.astro';
-import Statement from '../components/sections/Statement.astro';
-import Work from '../components/sections/Work.astro';
 import About from '../components/sections/About.astro';
+import Work from '../components/sections/Work.astro';
 import Experience from '../components/sections/Experience.astro';
 import Skills from '../components/sections/Skills.astro';
 import Contact from '../components/sections/Contact.astro';
@@ -16,13 +14,11 @@ import Contact from '../components/sections/Contact.astro';
 	<Header />
 	<main id="main" data-inert-when-menu>
 		<Hero />
-		<Statement />
-		<Work />
 		<About />
+		<Work />
 		<Experience />
 		<Skills />
 		<Contact />
 	</main>
 	<Footer />
-	<MobileCta />
 </Layout>

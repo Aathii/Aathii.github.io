@@ -1,0 +1,312 @@
+---
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import type { Project } from '../../data/content';
+
+interface Props {
+	project: Project;
+	index: number;
+}
+
+const { project, index } = Astro.props;
+
+const primaryHref = project.liveUrl ?? project.repoUrl;
+const address = project.liveUrl
+	? new URL(project.liveUrl).host + new URL(project.liveUrl).pathname.replace(/\/$/, '')
+	: project.repoUrl
+		? project.repoUrl.replace('https://', '')
+		: project.title;
+// Starts with the address shown in the window bar, so the spoken name matches the visible text.
+const mediaLabel = project.liveUrl
+	? `${address}: open ${project.title} (opens in a new tab)`
+	: `${address}: view ${project.title} on GitHub (opens in a new tab)`;
+const smallImage = project.image?.replace(/\.webp$/, '-720.webp');
+---
+
+<article class="project" aria-labelledby={`p-${project.slug}`}>
+	<div class="project-media" data-reveal="image" style={`--reveal-delay:0ms`}>
+		<span class="media-offset hatch" data-drift="-8 -8" aria-hidden="true"></span>
+		<a class="media-link" href={primaryHref} target="_blank" rel="noopener noreferrer" aria-label={mediaLabel}>
+			<span class="window">
+				<span class="window-bar" aria-hidden="true">
+					<span class="window-dots"><i></i><i></i><i></i></span>
+					<span class="window-address">{address}</span>
+				</span>
+				<span class="window-view">
+					{
+						project.image ? (
+							<img
+								class="shot"
+								src={project.image}
+								srcset={`${smallImage} 720w, ${project.image} 1100w`}
+								sizes="(min-width: 900px) 36vw, 88vw"
+								alt={project.imageAlt ?? ''}
+								width="1100"
+								height="2521"
+								loading={index === 0 ? 'eager' : 'lazy'}
+								decoding="async"
+							/>
+						) : (
+							<svg class="illustration" viewBox="0 0 320 200" role="img" aria-label="Illustration: a lead's message and an AI-drafted reply">
+								<g class="il-fill" transform="translate(5 5)">
+									<path d="M40 34h150a14 14 0 0 1 14 14v26a14 14 0 0 1-14 14H74l-18 16V88H40a14 14 0 0 1-14-14V48a14 14 0 0 1 14-14z" />
+									<path d="M130 104h150a14 14 0 0 1 14 14v34a14 14 0 0 1-14 14h-16v16l-18-16H130a14 14 0 0 1-14-14v-34a14 14 0 0 1 14-14z" />
+								</g>
+								<g class="il-stroke">
+									<path d="M40 34h150a14 14 0 0 1 14 14v26a14 14 0 0 1-14 14H74l-18 16V88H40a14 14 0 0 1-14-14V48a14 14 0 0 1 14-14z" />
+									<path d="M46 54h96M46 68h64" />
+									<path d="M130 104h150a14 14 0 0 1 14 14v34a14 14 0 0 1-14 14h-16v16l-18-16H130a14 14 0 0 1-14-14v-34a14 14 0 0 1 14-14z" />
+									<path d="M160 124h110M160 138h118M160 152h70" />
+									<path class="il-spark" d="M141 120v14M134 127h14M136 122l10 10M146 122l-10 10" />
+								</g>
+								<g class="il-stroke il-check">
+									<rect x="232" y="30" width="62" height="54" rx="10" />
+									<path d="m244 50 6 6 10-12M270 50h14M244 68h40" />
+								</g>
+							</svg>
+						)
+					}
+				</span>
+			</span>
+			<span class="reveal-panel" aria-hidden="true"></span>
+		</a>
+	</div>
+
+	<div class="project-body">
+		<p class="kicker label" data-reveal>{project.kind}</p>
+		<h3 id={`p-${project.slug}`} class="h-sub project-title" data-reveal>
+			{project.title}<span class="dot">.</span>
+		</h3>
+		<p class="project-summary" data-reveal style="--reveal-delay:120ms">{project.summary}</p>
+		<dl class="project-meta" data-reveal style="--reveal-delay:200ms">
+			<div>
+				<dt>Role</dt>
+				<dd>{project.role}</dd>
+			</div>
+			<div>
+				<dt>Built with</dt>
+				<dd>{project.tags.join(' · ')}</dd>
+			</div>
+		</dl>
+		<div class="project-actions" data-reveal style="--reveal-delay:260ms">
+			{
+				project.liveUrl && (
+					<Button href={project.liveUrl} external size="sm">
+						{project.liveLabel ?? 'Visit the site'}
+					</Button>
+				)
+			}
+			{
+				project.repoUrl &&
+					(project.liveUrl ? (
+						<a href={project.repoUrl} target="_blank" rel="noopener noreferrer" class="tlink">
+							<Icon name="github" size={16} />
+							<span>View code</span>
+						</a>
+					) : (
+						<Button href={project.repoUrl} external size="sm" icon="github">
+							View code
+						</Button>
+					))
+			}
+		</div>
+	</div>
+</article>
+
+<style>
+	.project {
+		display: grid;
+		gap: 2.25rem;
+		padding-block: clamp(3rem, 6vw, 4.5rem);
+		border-bottom: 1px solid var(--color-hair);
+	}
+
+	.project:first-child {
+		padding-top: 0;
+	}
+
+	@media (min-width: 900px) {
+		.project {
+			grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+			gap: clamp(3rem, 6vw, 5.5rem);
+			align-items: center;
+		}
+	}
+
+	/* ---------- Media ---------- */
+	.project-media {
+		position: relative;
+		margin-right: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.media-offset {
+		position: absolute;
+		inset: 1rem -1rem -1rem 1rem;
+		border-radius: 12px;
+	}
+
+	.media-link {
+		position: relative;
+		display: block;
+		overflow: hidden;
+		border-radius: 12px;
+	}
+
+	.window {
+		display: block;
+		overflow: hidden;
+		border-radius: 12px;
+		border: 2px solid var(--color-ink);
+		background: #fff;
+		transition: transform 0.4s var(--ease-out);
+	}
+
+	.window-bar {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		height: 2rem;
+		padding-inline: 0.75rem;
+		border-bottom: 2px solid var(--color-ink);
+		background: var(--color-paper);
+	}
+
+	.window-dots {
+		display: flex;
+		gap: 0.3rem;
+	}
+
+	.window-dots i {
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 999px;
+		border: 1.5px solid var(--color-ink);
+	}
+
+	.window-address {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-size: 0.72rem;
+		color: var(--color-muted);
+	}
+
+	.window-view {
+		display: block;
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+		background: var(--color-paper);
+	}
+
+	/* A tall capture shows its top at rest and slowly scrolls through the site on hover. */
+	.shot {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 50% 0%;
+		transition: object-position 0.9s var(--ease-soft);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.media-link:hover .shot,
+		.media-link:focus-visible .shot {
+			object-position: 50% 100%;
+			transition: object-position 7s cubic-bezier(0.45, 0, 0.55, 1);
+		}
+
+		.media-link:hover .window {
+			transform: translate3d(-3px, -3px, 0);
+		}
+	}
+
+	.illustration {
+		display: block;
+		width: 100%;
+		height: 100%;
+		padding: 0.5rem;
+	}
+
+	.il-fill {
+		fill: var(--color-fill);
+		stroke: var(--color-fill);
+		stroke-width: 3;
+		stroke-linejoin: round;
+	}
+
+	.il-stroke {
+		fill: none;
+		stroke: var(--color-line);
+		stroke-width: 2.5;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.il-spark {
+		stroke: var(--color-accent);
+	}
+
+	.il-check {
+		stroke: var(--color-ink);
+		stroke-width: 2;
+	}
+
+	/* ---------- Body ---------- */
+	.project-body {
+		min-width: 0;
+	}
+
+	.kicker {
+		color: var(--color-line);
+	}
+
+	.project-title {
+		margin-top: 0.75rem;
+		font-weight: 700;
+	}
+
+	.project-summary {
+		max-width: 36rem;
+		margin-top: 1.1rem;
+	}
+
+	.project-meta {
+		display: grid;
+		gap: 0.6rem;
+		margin-top: 1.5rem;
+		font-size: 0.95rem;
+	}
+
+	.project-meta div {
+		display: grid;
+		grid-template-columns: 6.5rem minmax(0, 1fr);
+		gap: 1rem;
+	}
+
+	.project-meta dt {
+		padding-top: 0.2rem;
+		font-size: 0.68rem;
+		font-weight: 600;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.project-meta dd {
+		color: var(--color-ink);
+	}
+
+	.project-actions .tlink {
+		font-size: 0.95rem;
+	}
+
+	.project-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem 1.5rem;
+		margin-top: 1.75rem;
+	}
+</style>

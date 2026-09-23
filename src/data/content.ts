@@ -1,224 +1,193 @@
 /**
- * Portfolio content, gathered from Aathii's GitHub (github.com/Aathii) and the live sites.
- * Only claims backed by a repo, README or live page are stated. [Square brackets] mean "confirm/fill".
+ * Portfolio content. Every claim is backed by something checkable: a live site, a repo, the diploma,
+ * or something Aathii confirmed directly (Membership Advisor at Fitness Connection, co-founder of
+ * EverSeasons Co, degree focus). No dates by request; add them to `experience` if wanted later.
  */
 
 export interface Project {
 	slug: string;
 	title: string;
-	/** Short category label above the title. */
+	/** Short label above the title, e.g. "iPhone app · Live". */
 	kind: string;
-	/** One line: what it is. */
+	/** One or two sentences: what it is and what I did. */
 	summary: string;
-	/** What it does and how it was built. Two or three sentences, facts only. */
-	description: string;
 	role: string;
-	year: string;
-	/** Free-form status line, e.g. "Live" or "Private repository". */
-	status: string;
 	tags: string[];
 	/** Live site (opens in a new tab). */
 	liveUrl?: string;
+	liveLabel?: string;
 	/** Source code on GitHub. */
 	repoUrl?: string;
-	/** Screenshots under /public/projects. Without them a generated cover is shown. */
-	images?: {
-		/** Main screenshot. When `pan` is set it is a tall capture whose top matches the first screen. */
-		desktop: string;
-		mobile?: string;
-		/** Slowly scroll the screenshot through the browser frame on hover (desktop pointers only). */
-		pan?: boolean;
-	};
-	/** Alt text for the screenshot. */
+	/**
+	 * Tall "scroll-through" screenshot under /public/projects. Its top matches the first screen and it
+	 * pans slowly inside the frame on hover. Without one, `illustration` is drawn instead.
+	 */
+	image?: string;
 	imageAlt?: string;
-	/** Wordmark for the generated cover when there are no screenshots. */
-	coverWord?: string;
+	illustration?: 'assistant';
 }
 
 export const projects: Project[] = [
 	{
 		slug: 'irl',
 		title: 'IRL',
-		kind: 'Product · iPhone app, web & API',
-		summary: 'Track it. See it. Make it IRL: food, training and progress in one connected system.',
-		description:
-			'A fitness app for iPhone with a live product site. It covers food logging with barcode search, set-by-set training plans, coaching, and a 12-week Future AI Vision of your goal. One shared FastAPI backend powers the web app and a native Expo / React Native app.',
-		role: 'Creator & lead developer',
-		year: 'Ongoing',
-		status: 'Live · code private',
+		kind: 'iPhone app · Live',
+		summary:
+			'A fitness app that brings food, training, activity and progress together. Food logging with barcode search, set-by-set training plans, coaching, and a 12-week AI projection of your goal. One FastAPI backend serves the web app and the native iPhone app.',
+		role: 'Creator and lead developer',
 		tags: ['React Native', 'Expo', 'FastAPI', 'Next.js', 'OpenAI API'],
 		liveUrl: 'https://makeitirl.ca',
-		images: { desktop: '/projects/irl-tall.webp', pan: true, mobile: '/projects/irl-mobile.webp' },
+		liveLabel: 'Visit makeitirl.ca',
+		image: '/projects/irl-tall.webp',
 		imageAlt: 'IRL homepage: the headline "Track it. See it. Make it IRL." beside three iPhone screens showing a 12-week vision, a workout plan and a food log.',
 	},
 	{
-		slug: 'elevate-digital',
-		title: 'Elevate Digital',
-		kind: 'Studio site · Brand & web',
-		summary: 'The web studio I run for small businesses, and the site that sells it.',
-		description:
-			'A dark, motion-led site for a bespoke web-design studio: services, process, packages and a showcase of live work, built so a visitor always knows the next step. Hand-built HTML and CSS with a mobile-first layout.',
-		role: 'Founder, designer & developer',
-		year: '2026',
-		status: 'Live',
-		tags: ['HTML', 'CSS', 'JavaScript', 'Responsive design'],
-		liveUrl: 'https://aathii.github.io/ElevateWebDesign/',
-		repoUrl: 'https://github.com/Aathii/ElevateWebDesign',
-		images: { desktop: '/projects/elevate-tall.webp', pan: true, mobile: '/projects/elevate-mobile.webp' },
-		imageAlt: 'Elevate Web Studio homepage: a glowing logo over a dark network backdrop with the headline "Premium websites for brands that want to look more established online".',
-	},
-	{
-		slug: 'coco-shack',
-		title: 'The Coco Shack',
-		kind: 'Client site · Events & booking',
-		summary: 'A cinematic booking site for a Toronto live coconut bar.',
-		description:
-			'A marketing and lead-capture site for a mobile coconut bar serving weddings, corporate events and festivals. Video hero, scroll-driven motion and a mobile-first booking flow, built with Astro, Tailwind CSS and Lenis smooth scroll.',
-		role: 'Designer & developer',
-		year: '2026',
-		status: 'Preview · pending client launch',
-		tags: ['Astro', 'Tailwind CSS', 'TypeScript', 'Lenis'],
-		liveUrl: 'https://aathii.github.io/coco-shack-website/',
-		repoUrl: 'https://github.com/Aathii/coco-shack-website',
-		images: { desktop: '/projects/coco-tall.webp', pan: true, mobile: '/projects/coco-mobile.webp' },
-		imageAlt: 'The Coco Shack homepage: a full-bleed video of coconuts being cut, with the headline "Coconuts cut live. Cocktails served in the shell."',
+		slug: 'follow-up-assistant',
+		title: 'Follow-up Assistant',
+		kind: 'AI tool · Built for my sales role',
+		summary:
+			'An assistant I built for my own job as a membership advisor. It drafts personal follow-up messages for new leads and current members, then automates the SMS, email, notes and next follow-up tasks in the CRM.',
+		role: 'Designer and developer',
+		tags: ['Python', 'Streamlit', 'OpenAI API', 'Gleantap CRM'],
+		repoUrl: 'https://github.com/Aathii/CRMAUTOGLEAN',
+		illustration: 'assistant',
 	},
 	{
 		slug: 'everseasons',
 		title: 'EverSeasons Co',
-		kind: 'Client site · Home maintenance',
-		summary: 'A premium site for a local home-maintenance company.',
-		description:
-			'A full-bleed, trust-first site for a home-maintenance brand: services, gallery, FAQ and a clear booking call to action on every screen size. Featured as live work on the Elevate Digital showcase.',
-		role: 'Designer & developer',
-		year: '2026',
-		status: 'Live',
-		tags: ['HTML', 'CSS', 'JavaScript', 'Responsive design'],
+		kind: 'My company · Live',
+		summary:
+			'The student-run home-maintenance company I co-founded: window and gutter cleaning, pressure washing, deck staining, driveway sealing and snow removal. I designed and built its website, with services, FAQ and booking on every screen size.',
+		role: 'Co-founder; designed and built the site',
+		tags: ['HTML', 'CSS', 'JavaScript'],
 		liveUrl: 'https://aathii.github.io/Everseasonz/',
+		liveLabel: 'Visit the site',
 		repoUrl: 'https://github.com/Aathii/Everseasonz',
-		images: { desktop: '/projects/everseasons-tall.webp', pan: true, mobile: '/projects/everseasons-mobile.webp' },
-		imageAlt: 'EverSeasons Co home page: a hand cleaning a window behind the brand mark and the headline "Home Maintenance".',
+		image: '/projects/everseasons-tall.webp',
+		imageAlt: 'EverSeasons Co homepage: a hand cleaning a window behind the brand mark and the headline "Home Maintenance".',
+	},
+	{
+		slug: 'coco-shack',
+		title: 'The Coco Shack',
+		kind: 'Client website · Live',
+		summary:
+			'A booking site for a Toronto live coconut bar that caters weddings, corporate events and festivals. Video hero, scroll-driven motion and a mobile-first path to booking.',
+		role: 'Designer and developer',
+		tags: ['Astro', 'Tailwind CSS', 'TypeScript'],
+		liveUrl: 'https://aathii.github.io/coco-shack-website/',
+		liveLabel: 'Visit the site',
+		repoUrl: 'https://github.com/Aathii/coco-shack-website',
+		image: '/projects/coco-tall.webp',
+		imageAlt: 'The Coco Shack homepage: a video of coconuts being cut, with the headline "Coconuts cut live. Cocktails served in the shell."',
 	},
 	{
 		slug: 'juicing4life',
 		title: 'Juicing4Life',
-		kind: 'Client site · Food & local retail',
-		summary: 'A warm, video-led site for a family-run cane juice booth in Scarborough.',
-		description:
-			'Menu, a three-generation family story and visit details, with call-ahead ordering front and centre. React 18, Vite, Tailwind and TypeScript, with per-character heading animation, scroll reveals and full reduced-motion support.',
-		role: 'Designer & developer',
-		year: '2026',
-		status: 'Built · not yet deployed',
+		kind: 'Client website',
+		summary:
+			'A warm, video-led site for a family-run cane juice booth in Scarborough: the menu, the family story and visit details, with call-ahead ordering up front.',
+		role: 'Designer and developer',
 		tags: ['React', 'Vite', 'Tailwind CSS', 'TypeScript'],
 		repoUrl: 'https://github.com/Aathii/juicing4life',
-		images: { desktop: '/projects/juicing4life-tall.webp', pan: true, mobile: '/projects/juicing4life-mobile.webp' },
-		imageAlt: 'Juicing4Life homepage: a full-bleed video of a fresh coconut and sugar cane behind a frosted card reading "Juicing4Life" with opening hours and location.',
+		image: '/projects/juicing4life-tall.webp',
+		imageAlt: 'Juicing4Life homepage: a video of fresh coconut and sugar cane behind a card reading "Juicing4Life" with opening hours and location.',
 	},
 ];
 
-export interface EarlierWork {
+export interface MoreWork {
 	title: string;
 	note: string;
-	year: string;
 	url: string;
-	external: string;
+	linkLabel: string;
 }
 
-/** Smaller or older things worth a link. */
-export const earlierWork: EarlierWork[] = [
+/** Smaller things worth a link. */
+export const moreWork: MoreWork[] = [
 	{
-		title: 'Follow-up Assistant',
-		note: 'Streamlit app that uses an LLM to draft lead messages and automates CRM follow-ups.',
-		year: '2026',
-		url: 'https://github.com/Aathii/CRMAUTOGLEAN',
-		external: 'GitHub',
+		title: 'Elevate Digital',
+		note: 'The site for my web design studio: services, process and packages for small businesses.',
+		url: 'https://aathii.github.io/ElevateWebDesign/',
+		linkLabel: 'Live site',
 	},
 	{
 		title: 'Hackathon team project',
-		note: 'Python project built with three teammates for a hackathon.',
-		year: '2020',
+		note: 'A Python project built with three teammates at a hackathon.',
 		url: 'https://github.com/Aathii/purple-casimir',
-		external: 'GitHub',
-	},
-	{
-		title: 'My first site, Aathii.R',
-		note: 'Where it started: a personal page from high school.',
-		year: '2020',
-		url: 'https://aathii.github.io/Devthii/',
-		external: 'Live',
+		linkLabel: 'GitHub',
 	},
 ];
 
-export interface Milestone {
-	period: string;
+export interface Role {
 	title: string;
 	org: string;
+	/** Optional link for the organisation. */
+	orgUrl?: string;
+	current?: boolean;
 	points: string[];
 }
 
-export const experience: Milestone[] = [
+export const experience: Role[] = [
 	{
-		period: '2026 – Now',
-		title: 'Founder, designer & developer',
-		org: 'Elevate Digital',
+		title: 'Membership Advisor',
+		org: 'Fitness Connection',
+		current: true,
 		points: [
-			'Design and build premium, conversion-focused websites for local service businesses.',
-			'Live work: EverSeasons Co. In build: The Coco Shack.',
+			'Sales: walk prospective members through the club, learn their goals and help them choose the right membership.',
+			'Follow up with new leads and current members, and built an AI assistant to automate that follow-up.',
 		],
 	},
 	{
-		period: 'Now',
-		title: 'Creator & lead developer',
+		title: 'Co-founder',
+		org: 'EverSeasons Co',
+		orgUrl: 'https://aathii.github.io/Everseasonz/',
+		points: [
+			'Student-run home-maintenance company: exterior cleaning, seasonal upkeep and protection.',
+			'Designed and built the company website.',
+		],
+	},
+	{
+		title: 'Creator and lead developer',
 		org: 'IRL',
-		points: [
-			'Live at makeitirl.ca: an iPhone app, a web app and a shared API.',
-			'Barcode food logging, set-by-set workout tracking and AI-assisted coaching features.',
-		],
+		orgUrl: 'https://makeitirl.ca',
+		points: ['A fitness app for iPhone, live at makeitirl.ca, with a web app and a shared API.'],
 	},
 	{
-		period: 'Education',
-		title: 'Honours Bachelor of Science',
-		org: 'University of Toronto',
-		points: [],
-	},
-	{
-		period: '2020 – 2021',
-		title: 'Coding Club President · Student Council President',
-		org: 'High school',
-		points: [
-			'Led the coding club, mentored students, and helped launch the school’s social channels, CedarNews and CedarTree.',
-			'Competed in hackathons: KuriusHacks Christmas Edition, NewYearNewHack and HackTheLib 2021.',
-		],
+		title: 'Founder',
+		org: 'Elevate Digital',
+		orgUrl: 'https://aathii.github.io/ElevateWebDesign/',
+		points: ['Web design studio: I design and build websites for small businesses.'],
 	},
 ];
+
+export const education = {
+	degree: 'Honours Bachelor of Science',
+	school: 'University of Toronto',
+	focus: 'Technology and coding, computer science, and math.',
+};
 
 export interface SkillGroup {
 	label: string;
 	items: string[];
 }
 
-/** Every entry is evidenced by a repo or a live site. */
+/** Every entry is evidenced by a repo, a live site or the sales role. */
 export const skills: SkillGroup[] = [
 	{ label: 'Languages', items: ['Python', 'TypeScript', 'JavaScript', 'HTML & CSS'] },
-	{ label: 'Frontend & mobile', items: ['React', 'React Native (Expo)', 'Next.js', 'Astro', 'Tailwind CSS', 'Vite'] },
-	{ label: 'Backend & data', items: ['FastAPI', 'Streamlit', 'REST APIs'] },
-	{ label: 'AI', items: ['OpenAI API', 'LLM-assisted features'] },
-	{ label: 'Design & motion', items: ['UI design', 'Responsive layouts', 'Scroll animation', 'Lenis'] },
-	{ label: 'Tooling', items: ['Git & GitHub', 'GitHub Pages', 'EAS builds'] },
-];
-
-/** Big statement that lights up word by word as you scroll. Keep it under ~45 words. */
-export const statement =
-	'I care about how software feels as much as how it runs. So far that has meant a cross-platform fitness app, a web studio for local businesses, and sites that real brands put their name on.';
-
-export const facts = [
-	{ label: 'Focus', value: 'Full-stack · Mobile · Web design' },
-	{ label: 'Building now', value: 'IRL and Elevate Digital' },
-	{ label: 'Education', value: 'University of Toronto, Honours B.Sc.' },
-	{ label: 'Looking for', value: 'Internships & new roles' },
+	{ label: 'Frameworks', items: ['React', 'React Native (Expo)', 'Next.js', 'Astro', 'Tailwind CSS', 'FastAPI', 'Streamlit'] },
+	{ label: 'AI', items: ['OpenAI API', 'LLM-powered features and automation'] },
+	{ label: 'Design', items: ['UI design', 'Responsive layouts', 'Motion'] },
+	{ label: 'Business', items: ['Membership sales', 'Lead follow-up', 'CRM automation (Gleantap)', 'Running a small business'] },
 ];
 
 export const aboutParagraphs = [
-	'I have been building since high school: I ran the coding club, mentored other students and competed in hackathons. I went on to earn an Honours Bachelor of Science at the University of Toronto, and I never stopped building.',
-	'Today I am building IRL, a fitness product across web, API and native mobile, and running Elevate Digital, the studio I started to design and ship premium websites for small businesses. I like owning the whole thing: the idea, the interface, the code and the details in between.',
+	'I work in sales as a membership advisor at Fitness Connection. Alongside that I build: IRL, a fitness app for iPhone; websites for small businesses through my studio, Elevate Digital; and EverSeasons Co, the home-maintenance company I co-founded.',
+	'Selling face to face shapes how I build: start with what the customer actually needs, then write the code. It is also why I built an AI assistant to automate my own sales follow-ups.',
+	'I studied technology and coding, computer science and math at the University of Toronto, where I earned an Honours Bachelor of Science.',
 ];
+
+/** The three short "what I do" rows in the About section. */
+export const pillars = [
+	{ icon: 'build', label: 'Build', text: 'IRL, a fitness app for iPhone, plus websites for small businesses.' },
+	{ icon: 'sell', label: 'Sell', text: 'Membership advisor at Fitness Connection.' },
+	{ icon: 'start', label: 'Start', text: 'Co-founder of EverSeasons Co and founder of Elevate Digital.' },
+] as const;

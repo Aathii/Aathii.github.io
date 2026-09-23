@@ -43,7 +43,8 @@ export function initReveal() {
 				}
 			}
 		},
-		{ threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+		// Fires once an element's top is about 15% up from the bottom of the viewport, then never again.
+		{ threshold: 0, rootMargin: '0px 0px -15% 0px' },
 	);
 
 	elements.forEach((el) => observer.observe(el));

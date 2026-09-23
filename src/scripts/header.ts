@@ -1,8 +1,8 @@
 import { lockScroll, onScroll, unlockScroll } from './smooth-scroll';
 
 /**
- * Header behaviour: glass background once scrolled, tucks away while scrolling down and
- * slides back on the way up, highlights the section in view, and runs the mobile menu.
+ * Header: paper background once the page scrolls, highlights the section in view, and runs the
+ * full-screen colour-wipe menu on phones and tablets.
  */
 export function initHeader() {
 	const header = document.getElementById('site-header');
@@ -12,18 +12,8 @@ export function initHeader() {
 	const menu = document.getElementById('mobile-menu');
 	const backgroundRegions = Array.from(document.querySelectorAll<HTMLElement>('[data-inert-when-menu]'));
 	let menuOpen = false;
-	let lastY = window.scrollY;
 
-	onScroll((y) => {
-		header.classList.toggle('is-scrolled', y > 24);
-		if (menuOpen) return;
-		const delta = y - lastY;
-		if (Math.abs(delta) < 4) return;
-		header.classList.toggle('is-hidden', delta > 0 && y > window.innerHeight * 0.9);
-		lastY = y;
-	});
-
-	header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
+	onScroll((y) => header.classList.toggle('is-scrolled', y > 16));
 
 	/* Active section indicator */
 	const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]'));
@@ -59,25 +49,22 @@ export function initHeader() {
 		sectionIds.forEach((_, section) => observer.observe(section));
 	}
 
-	/* Mobile menu */
+	/* Menu */
 	if (!toggle || !menu) return;
 
 	const setMenu = (open: boolean, { restoreFocus = true, viaKeyboard = false } = {}) => {
 		if (open === menuOpen) return;
 		menuOpen = open;
 		toggle.setAttribute('aria-expanded', String(open));
-		toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
 		menu.classList.toggle('is-open', open);
 		menu.toggleAttribute('inert', !open);
 		document.body.classList.toggle('menu-open', open);
-		header.classList.remove('is-hidden');
 		backgroundRegions.forEach((region) => region.toggleAttribute('inert', open));
 
 		if (open) {
 			lockScroll();
-			// Keyboard users land inside the menu; touch users shouldn't see a stray focus ring.
 			if (viaKeyboard) {
-				window.setTimeout(() => menu.querySelector<HTMLElement>('a')?.focus({ preventScroll: true }), 320);
+				window.setTimeout(() => menu.querySelector<HTMLElement>('a')?.focus({ preventScroll: true }), 450);
 			}
 		} else {
 			unlockScroll();

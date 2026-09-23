@@ -4,10 +4,8 @@ import type { IconName } from './icons';
 
 interface Props {
 	href?: string;
-	variant?: 'primary' | 'ghost';
-	size?: 'sm' | 'md' | 'lg';
-	icon?: IconName;
-	magnetic?: boolean;
+	size?: 'sm' | 'md';
+	icon?: IconName | null;
 	class?: string;
 	external?: boolean;
 	download?: boolean;
@@ -17,10 +15,8 @@ interface Props {
 
 const {
 	href,
-	variant = 'primary',
 	size = 'md',
 	icon = 'arrowUpRight',
-	magnetic = false,
 	class: className = '',
 	external = false,
 	download = false,
@@ -28,20 +24,14 @@ const {
 	...rest
 } = Astro.props;
 
-const sizeClass = size === 'sm' ? 'btn-sm' : size === 'lg' ? 'btn-lg' : '';
-const classes = `btn btn-${variant} ${sizeClass} ${className}`.trim();
+const classes = `btn ${size === 'sm' ? 'btn-sm' : ''} ${className}`.trim();
 const Tag = href ? 'a' : 'button';
 const linkProps = href
 	? { href, ...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {}), ...(download ? { download: '' } : {}) }
 	: { type };
 ---
 
-<Tag class={classes} data-magnetic={magnetic ? '' : undefined} {...linkProps} {...rest}>
-	<span class="btn-roll">
-		<span class="btn-roll-inner">
-			<span><slot /></span>
-			<span aria-hidden="true"><slot /></span>
-		</span>
-	</span>
-	<Icon name={icon} size={18} class="btn-icon" />
+<Tag class={classes} data-btn {...linkProps} {...rest}>
+	<span><slot /></span>
+	{icon && <Icon name={icon} size={18} class="btn-icon" />}
 </Tag>

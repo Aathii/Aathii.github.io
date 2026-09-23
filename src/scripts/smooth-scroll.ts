@@ -1,10 +1,9 @@
-import Lenis from 'lenis';
-
+/**
+ * Native scrolling (no smooth-scroll library): one shared, frame-batched scroll listener, scroll
+ * locking for the menu, and in-page anchor jumps that also move keyboard focus.
+ */
 export const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-let lenis: Lenis | null = null;
-
-/* One shared scroll listener, batched to animation frames, feeds every scroll effect. */
 const scrollListeners: ((y: number) => void)[] = [];
 let scrollQueued = false;
 
@@ -27,39 +26,11 @@ export function onScroll(cb: (y: number) => void) {
 	cb(window.scrollY);
 }
 
-const resizeListeners: (() => void)[] = [];
-let resizeTimer = 0;
-
-window.addEventListener('resize', () => {
-	window.clearTimeout(resizeTimer);
-	resizeTimer = window.setTimeout(() => resizeListeners.forEach((cb) => cb()), 120);
-});
-
-export function onResize(cb: () => void) {
-	resizeListeners.push(cb);
-}
-
-/** Lenis and native scrolling both honour `scroll-padding-top` on <html>, so targets clear the header. */
-export function scrollToTarget(target: HTMLElement | number, { immediate = false } = {}) {
-	if (lenis) {
-		// A native scroll (keyboard focus, find-in-page…) can land a frame before Lenis hears
-		// about it; re-sync first so the target isn't computed from a stale position.
-		if (!lenis.isScrolling) lenis.scrollTo(window.scrollY, { immediate: true, force: true });
-		lenis.scrollTo(target, { immediate, force: true, duration: 1.3 });
-		return;
-	}
-	const behavior = immediate || reduceMotion ? 'auto' : 'smooth';
-	if (typeof target === 'number') window.scrollTo({ top: target, behavior });
-	else target.scrollIntoView({ block: 'start', behavior });
-}
-
 export function lockScroll() {
-	lenis?.stop();
 	document.documentElement.classList.add('scroll-locked');
 }
 
 export function unlockScroll() {
-	lenis?.start();
 	document.documentElement.classList.remove('scroll-locked');
 }
 
@@ -76,7 +47,12 @@ function initAnchorLinks() {
 		if (!target) return;
 
 		event.preventDefault();
-		scrollToTarget(hash === '#top' ? 0 : target);
+		const behavior: ScrollBehavior = reduceMotion ? 'auto' : 'smooth';
+		// The menu may still be releasing its scroll lock; wait a frame so the jump isn't swallowed.
+		requestAnimationFrame(() => {
+			if (hash === '#top') window.scrollTo({ top: 0, behavior });
+			else target.scrollIntoView({ block: 'start', behavior });
+		});
 		history.replaceState(null, '', hash === '#top' ? location.pathname + location.search : hash);
 
 		// Move focus for keyboard and screen-reader users without a second jump.
@@ -86,8 +62,5 @@ function initAnchorLinks() {
 }
 
 export function initSmoothScroll() {
-	if (!reduceMotion) {
-		lenis = new Lenis({ autoRaf: true, lerp: 0.1, smoothWheel: true });
-	}
 	initAnchorLinks();
 }
