@@ -12,7 +12,6 @@
   --color-ink-2: #3a4366;
   --color-muted: #5c6480;
   --color-line: #3b37e3;
-  --color-line-deep: #2a26b8;
   --color-fill: #d9dffb;
   --color-accent: #e8531f;
   --color-hair: rgba(17, 26, 58, 0.16);
@@ -345,11 +344,6 @@
     --dy: 0px;
     transform: translate3d(var(--dx), var(--dy), 0);
     transition: transform 1.5s ease-out;
-  }
-
-  .hairline {
-    border: 0;
-    border-top: 1px solid var(--color-hair);
   }
 
   /* ---------- Scroll reveal (scripts/reveal.ts). Gated on .js so nothing hides without JS. ---------- */

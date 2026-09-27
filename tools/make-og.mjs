@@ -2,7 +2,7 @@
 // Needs `playwright-core` (a dev dependency) and a local Edge/Chrome:  node tools/make-og.mjs
 // Text comes from src/config/site.ts (read with a small regex so no build step is needed).
 import { chromium } from 'playwright-core';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -21,13 +21,15 @@ const html = readFileSync(join(root, 'tools/og-template.html'), 'utf8')
 const tmp = join(root, 'tools/.og-render.html');
 writeFileSync(tmp, html);
 
-const candidates = [
-  'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-  'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
-  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-];
-const executablePath = candidates.find(existsSync);
-const browser = await chromium.launch({ executablePath, headless: true });
+// Use whichever stable browser is installed (works on Windows, macOS and Linux).
+let browser;
+for (const channel of ['chrome', 'msedge']) {
+  try {
+    browser = await chromium.launch({ channel, headless: true });
+    break;
+  } catch {}
+}
+if (!browser) throw new Error('Install Google Chrome or Microsoft Edge to render the image.');
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 await page.goto(url(tmp));
 await page.evaluate(() => document.fonts.ready);

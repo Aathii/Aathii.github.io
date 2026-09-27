@@ -1,4 +1,4 @@
-import { lockScroll, onScroll, unlockScroll } from './smooth-scroll';
+import { lockScroll, onScroll, unlockScroll } from './scroll';
 
 /**
  * Header: paper background once the page scrolls, highlights the section in view, and runs the
@@ -56,6 +56,7 @@ export function initHeader() {
 		if (open === menuOpen) return;
 		menuOpen = open;
 		toggle.setAttribute('aria-expanded', String(open));
+		toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
 		menu.classList.toggle('is-open', open);
 		menu.toggleAttribute('inert', !open);
 		document.body.classList.toggle('menu-open', open);

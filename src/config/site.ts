@@ -16,14 +16,16 @@ export const site = {
   /** Two letters for the header mark and the favicon. */
   initials: 'AR',
   role: 'Developer, co-founder and sales lead',
+  /** Short professional headline used in the page title. */
+  headline: 'Software developer in Toronto',
   description:
-    'Aathii Rakurakavan is a University of Toronto graduate building IRL, an AI fitness app for iPhone, a Sales Lead at Fitness Connection, and co-founder of EverSeasons Co. Selected work, experience and résumé.',
+    'Toronto developer (U of T Honours B.Sc.) building IRL, an AI fitness app for iPhone; co-founder of EverSeasons Co. Selected work, experience and résumé.',
   /** Shown in structured data (search results). */
   education: 'University of Toronto',
   location: 'Toronto, ON',
 
   /** Small status line above the hero greeting. Set to '' to hide it. */
-  availability: 'Open to new opportunities',
+  availability: 'Open to software development roles',
 
   contact: {
     email: 'aathiir03@gmail.com',
@@ -39,7 +41,7 @@ export const site = {
   socials: [
     { label: 'GitHub', url: 'https://github.com/Aathii' },
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/aathii-r-51760b1a5' },
-    { label: 'X', url: 'https://x.com/aathiiraku' },
+    { label: 'X (Twitter)', url: 'https://x.com/aathiiraku' },
   ] as { label: string; url: string }[],
 };
 

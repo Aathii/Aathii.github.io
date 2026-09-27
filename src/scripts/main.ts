@@ -3,10 +3,10 @@ import { initDrift } from './drift';
 import { initHeader } from './header';
 import { initReady } from './ready';
 import { initReveal } from './reveal';
-import { initSmoothScroll } from './smooth-scroll';
+import { initAnchorLinks } from './scroll';
 
 initReady();
-initSmoothScroll();
+initAnchorLinks();
 initHeader();
 initReveal();
 initDrift();

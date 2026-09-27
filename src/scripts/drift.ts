@@ -1,4 +1,4 @@
-import { reduceMotion } from './smooth-scroll';
+import { reduceMotion } from './scroll';
 
 /**
  * Decorative layers marked `data-drift="x y"` shift up to x/y pixels against the pointer. The CSS

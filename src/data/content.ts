@@ -52,9 +52,9 @@ export const projects: Project[] = [
 	{
 		slug: 'follow-up-assistant',
 		title: 'CRM Follow-up Automation',
-		kind: 'Automation · Built for my sales job',
+		kind: 'AI automation · Built for my sales job',
 		summary:
-			'A workflow on the GleanTap CRM API that drafts follow-up messages, logs texts, emails and notes automatically, and completes routine follow-up tasks. It saves several hours of manual data entry a week and cut my daily workflow down to phone calls.',
+			"A Streamlit tool on the GleanTap CRM API: OpenAI drafts each lead's follow-up, then the tool logs the text, email or note and completes the routine follow-up task. It saves several hours of data entry a week and cut my daily workflow down to phone calls.",
 		role: 'Designer and developer',
 		tags: ['Python', 'Streamlit', 'OpenAI API', 'GleanTap API'],
 		repoUrl: 'https://github.com/Aathii/CRMAUTOGLEAN',
@@ -68,8 +68,8 @@ export const projects: Project[] = [
 			'The student-run home-maintenance company I co-founded: window and gutter cleaning, pressure washing, deck staining, driveway sealing and snow removal. I designed and built its website, with services, FAQ and booking on every screen size.',
 		role: 'Co-founder; designed and built the site',
 		tags: ['HTML', 'CSS', 'JavaScript'],
-		liveUrl: 'https://aathii.github.io/Everseasonz/',
-		liveLabel: 'Visit the site',
+		liveUrl: 'https://everseasonsco.ca',
+		liveLabel: 'Visit everseasonsco.ca',
 		repoUrl: 'https://github.com/Aathii/Everseasonz',
 		image: '/projects/everseasons-tall.webp',
 		imageAlt: 'EverSeasons Co homepage: a hand cleaning a window behind the brand mark and the headline "Home Maintenance".',
@@ -82,8 +82,8 @@ export const projects: Project[] = [
 			'A booking site for a Toronto live coconut bar that caters weddings, corporate events and festivals. Video hero, scroll-driven motion and a mobile-first path to booking.',
 		role: 'Designer and developer',
 		tags: ['Astro', 'Tailwind CSS', 'TypeScript'],
-		liveUrl: 'https://aathii.github.io/coco-shack-website/',
-		liveLabel: 'Visit the site',
+		liveUrl: 'https://thecocoshack.ca',
+		liveLabel: 'Visit thecocoshack.ca',
 		repoUrl: 'https://github.com/Aathii/coco-shack-website',
 		image: '/projects/coco-tall.webp',
 		imageAlt: 'The Coco Shack homepage: a video of coconuts being cut, with the headline "Coconuts cut live. Cocktails served in the shell."',
@@ -143,12 +143,6 @@ export const moreWork: MoreWork[] = [
 		url: 'https://aathii.github.io/ElevateWebDesign/',
 		linkLabel: 'Live site',
 	},
-	{
-		title: 'Hackathon team project',
-		note: 'A Python project built with three teammates at a hackathon.',
-		url: 'https://github.com/Aathii/purple-casimir',
-		linkLabel: 'GitHub',
-	},
 ];
 
 export interface Role {
@@ -161,7 +155,6 @@ export interface Role {
 	period?: string;
 	/** Small line under the title, e.g. "Promoted from Sales Specialist". */
 	note?: string;
-	current?: boolean;
 	points: string[];
 }
 
@@ -172,7 +165,6 @@ export const experience: Role[] = [
 		location: 'Richmond Hill, ON',
 		period: 'May 2025 – Present',
 		note: 'Promoted from Sales Specialist',
-		current: true,
 		points: [
 			'Top-performing sales representative at the location; I own the full membership sales cycle, from first inquiry to close.',
 			'Built an automated workflow on the GleanTap CRM API that logs texts, emails and notes and completes routine follow-ups, saving several hours of data entry a week.',
@@ -182,7 +174,7 @@ export const experience: Role[] = [
 	{
 		title: 'Co-founder',
 		org: 'EverSeasons Co',
-		orgUrl: 'https://aathii.github.io/Everseasonz/',
+		orgUrl: 'https://everseasonsco.ca',
 		points: [
 			'Student-run home-maintenance company: exterior cleaning, seasonal upkeep and protection.',
 			'Designed and built the company website.',
@@ -209,7 +201,7 @@ export const experience: Role[] = [
 export const education = {
 	degree: 'Honours Bachelor of Science',
 	school: 'University of Toronto',
-	period: 'Sept 2021 – Apr 2026',
+	period: 'Sep 2021 – Apr 2026',
 	program: 'Technology, Coding & Society, with a double minor in Computer Science and Mathematics.',
 };
 
@@ -226,19 +218,18 @@ export const skills: SkillGroup[] = [
 	{ label: 'Backend & data', items: ['REST API design', 'SQLite', 'JWT / OAuth authentication', 'Third-party API integration'] },
 	{ label: 'Infrastructure', items: ['Render', 'Linux / Unix', 'Expo Application Services (EAS)', 'Excel automation'] },
 	{ label: 'Developer tools', items: ['Git', 'Claude Code', 'OpenAI Codex', 'pytest', 'ESLint', 'GDB', 'AddressSanitizer'] },
-	{ label: 'Business', items: ['Full-cycle membership sales', 'CRM automation', 'GleanTap, Antaris, Less Annoying CRM', 'Event operations'] },
+	{ label: 'Business', items: ['Full-cycle membership sales', 'CRM automation (GleanTap, Antaris, Less Annoying CRM)', 'Event operations'] },
 	{ label: 'Spoken', items: ['English', 'French', 'Tamil'] },
 ];
 
 export const aboutParagraphs = [
-	"I'm a University of Toronto graduate (Honours B.Sc. in Technology, Coding & Society, with minors in computer science and math) building IRL, a full-stack AI fitness app for iPhone. My background runs from C, Haskell and Racket to React Native and FastAPI.",
+	"I'm a University of Toronto graduate (Honours B.Sc. in Technology, Coding & Society, with minors in Computer Science and Mathematics) building IRL, a full-stack AI fitness app for iPhone. My background runs from C, Haskell and Racket to React Native and FastAPI, and I speak English, French and Tamil.",
 	"I'm also a Sales Lead at Fitness Connection, promoted from Sales Specialist, where I own the membership sales cycle from first inquiry to close. Selling face to face shapes how I build: start with what the customer needs, then write the code. It's also why I automated my own CRM follow-ups.",
-	'Outside that, I co-founded EverSeasons Co, a student-run home-maintenance company, and design websites for small businesses through Elevate Digital. I speak English, French and Tamil.',
 ];
 
 /** The three short "what I do" rows in the About section. */
 export const pillars = [
-	{ icon: 'build', label: 'Build', text: 'IRL, an AI fitness app for iPhone, plus websites for small businesses.' },
+	{ icon: 'build', label: 'Build', text: 'Full-stack and iOS, end to end: IRL runs from a FastAPI backend to App Store subscriptions.' },
 	{ icon: 'sell', label: 'Sell', text: 'Sales Lead at Fitness Connection and the top-performing rep at my location.' },
 	{ icon: 'start', label: 'Start', text: 'Co-founder of EverSeasons Co and founder of Elevate Digital.' },
 ] as const;

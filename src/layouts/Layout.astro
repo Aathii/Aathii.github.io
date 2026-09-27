@@ -5,6 +5,7 @@ import '../styles/global.css';
 import displayFont from '@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url';
 import bodyFont from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
 import { site } from '../config/site';
+import { experience, skills } from '../data/content';
 
 interface Props {
 	title?: string;
@@ -13,7 +14,7 @@ interface Props {
 }
 
 const {
-	title = `${site.name} | Developer, co-founder and sales`,
+	title = `${site.name} | ${site.headline}`,
 	description = site.description,
 	noindex = !site.live,
 } = Astro.props;
@@ -22,20 +23,26 @@ const siteUrl = Astro.site ?? new URL('https://aathii.github.io');
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const ogImageUrl = new URL(`${import.meta.env.BASE_URL}og-image.png`, siteUrl).href;
 
+// Derived from content.ts so the structured data can't drift from what the page says.
+const currentJob = experience[0];
+const ogImageAlt = `${site.name}: ${site.headline}`;
 const jsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'Person',
 	'@id': `${siteUrl.href}#person`,
 	name: site.name,
-	jobTitle: 'Sales Lead',
-	worksFor: { '@type': 'Organization', name: 'Fitness Connection' },
+	givenName: site.firstName,
+	familyName: site.name.replace(site.firstName, '').trim(),
+	jobTitle: ['Software Developer', currentJob.title],
+	worksFor: { '@type': 'Organization', name: currentJob.org },
 	address: { '@type': 'PostalAddress', addressLocality: 'Toronto', addressRegion: 'ON', addressCountry: 'CA' },
-	knowsLanguage: ['English', 'French', 'Tamil'],
+	knowsLanguage: skills.find((g) => g.label === 'Spoken')?.items ?? [],
+	knowsAbout: skills.filter((g) => ['Languages', 'Mobile & web', 'AI & computer vision'].includes(g.label)).flatMap((g) => g.items),
 	description: site.description,
 	url: siteUrl.href,
 	image: new URL(`${import.meta.env.BASE_URL}portrait.webp`, siteUrl).href,
 	email: `mailto:${site.contact.email}`,
-	alumniOf: { '@type': 'CollegeOrUniversity', name: site.education },
+	alumniOf: { '@type': 'CollegeOrUniversity', name: site.education, sameAs: 'https://www.utoronto.ca' },
 	sameAs: site.socials.map((s) => s.url),
 };
 ---
@@ -54,11 +61,12 @@ const jsonLd = {
 		</script>
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		{noindex && <meta name="robots" content="noindex, nofollow" />}
-		<link rel="canonical" href={canonicalUrl} />
+		{noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow, max-image-preview:large" />}
+		{!noindex && <link rel="canonical" href={canonicalUrl} />}
 		<meta name="theme-color" content="#ffffff" />
 		<meta name="color-scheme" content="light" />
 
+		<link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} sizes="32x32" />
 		<link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
 		<link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}apple-touch-icon.png`} />
 
@@ -69,17 +77,21 @@ const jsonLd = {
 		<meta property="og:site_name" content={site.name} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:url" content={canonicalUrl} />
+		{!noindex && <meta property="og:url" content={canonicalUrl} />}
+		<meta property="og:locale" content="en_CA" />
 		<meta property="og:image" content={ogImageUrl} />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
-		<meta property="og:image:alt" content={`${site.name}: developer, co-founder and sales`} />
+		<meta property="og:image:type" content="image/png" />
+		<meta property="og:image:alt" content={ogImageAlt} />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={ogImageUrl} />
+		<meta name="twitter:image:alt" content={ogImageAlt} />
+		<meta name="twitter:creator" content="@aathiiraku" />
 
-		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+		{!noindex && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
 	</head>
 	<body>
 		<div id="top" class="absolute top-0 h-px w-px"></div>

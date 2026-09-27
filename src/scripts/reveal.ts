@@ -1,4 +1,4 @@
-import { reduceMotion } from './smooth-scroll';
+import { reduceMotion } from './scroll';
 
 /** Fades/clips elements marked `data-reveal` into view, staggering siblings that enter together. */
 export function initReveal() {

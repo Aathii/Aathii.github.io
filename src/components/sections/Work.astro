@@ -11,7 +11,7 @@ import { moreWork, projects, systemsWork } from '../../data/content';
 			<span class="rule" data-reveal="rule" aria-hidden="true"></span>
 			<p data-reveal style="--reveal-delay:300ms">
 				An app I'm building, automation I made for my own sales job, the company I co-founded, websites for small
-				businesses, and some systems work. Hover a screenshot to scroll through the real site.
+				businesses, and some systems work.<span class="hover-hint"> Hover a screenshot to scroll through the real site.</span>
 			</p>
 		</div>
 
@@ -61,6 +61,16 @@ import { moreWork, projects, systemsWork } from '../../data/content';
 </section>
 
 <style>
+	.hover-hint {
+		display: none;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.hover-hint {
+			display: inline;
+		}
+	}
+
 	.projects {
 		margin-top: clamp(3.5rem, 7vw, 5.5rem);
 	}

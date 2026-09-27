@@ -24,7 +24,6 @@ import { education, experience } from '../../data/content';
 								) : (
 									<span>{role.org}</span>
 								)}
-								{role.current && <span class="now">Current</span>}
 							</p>
 							{(role.note || role.location) && (
 								<p class="role-meta">{[role.note, role.location].filter(Boolean).join(' · ')}</p>
@@ -104,28 +103,6 @@ import { education, experience } from '../../data/content';
 		align-items: center;
 		min-height: 2.75rem;
 		background-position: 0 78%;
-	}
-
-	.now {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4rem;
-		padding: 0.2rem 0.65rem;
-		border-radius: 999px;
-		border: 1.5px solid var(--color-line);
-		font-size: 0.68rem;
-		font-weight: 600;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		color: var(--color-line);
-	}
-
-	.now::before {
-		content: '';
-		width: 0.4rem;
-		height: 0.4rem;
-		border-radius: 999px;
-		background: var(--color-line);
 	}
 
 	.role-points {

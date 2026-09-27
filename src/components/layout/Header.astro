@@ -33,14 +33,12 @@ import { mailto, nav, site } from '../../config/site';
 
 		<div class="header-actions">
 			<a href={mailto()} class="hire label">
-				<svg class="hire-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-					<path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z" />
-				</svg>
+				<Icon name="sell" size={22} class="hire-icon" />
 				<span>Get in touch</span>
 			</a>
-			<button id="menu-toggle" type="button" class="menu-toggle label" aria-expanded="false" aria-controls="mobile-menu">
-				<span class="menu-word" data-open>Menu</span>
-				<span class="menu-word" data-close>Close</span>
+			<button id="menu-toggle" type="button" class="menu-toggle label" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+				<span class="menu-word" data-open aria-hidden="true">Menu</span>
+				<span class="menu-word" data-close aria-hidden="true">Close</span>
 			</button>
 		</div>
 	</div>

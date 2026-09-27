@@ -43,7 +43,7 @@ const smallImage = project.image?.replace(/\.webp$/, '-720.webp');
 								alt={project.imageAlt ?? ''}
 								width="1100"
 								height="2521"
-								loading={index === 0 ? 'eager' : 'lazy'}
+								loading="lazy"
 								decoding="async"
 							/>
 						) : (
@@ -106,12 +106,12 @@ const smallImage = project.image?.replace(/\.webp$/, '-720.webp');
 			{
 				project.repoUrl &&
 					(project.liveUrl ? (
-						<a href={project.repoUrl} target="_blank" rel="noopener noreferrer" class="tlink">
+						<a href={project.repoUrl} target="_blank" rel="noopener noreferrer" class="tlink" aria-label={`View code: ${project.title} on GitHub (opens in a new tab)`}>
 							<Icon name="github" size={16} />
 							<span>View code</span>
 						</a>
 					) : (
-						<Button href={project.repoUrl} external size="sm" icon="github">
+						<Button href={project.repoUrl} external size="sm" icon="github" aria-label={`View code: ${project.title} on GitHub (opens in a new tab)`}>
 							View code
 						</Button>
 					))

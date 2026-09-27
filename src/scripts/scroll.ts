@@ -1,5 +1,5 @@
 /**
- * Native scrolling (no smooth-scroll library): one shared, frame-batched scroll listener, scroll
+ * Scroll helpers (native scrolling, no library): one shared, frame-batched scroll listener, scroll
  * locking for the menu, and in-page anchor jumps that also move keyboard focus.
  */
 export const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -34,7 +34,7 @@ export function unlockScroll() {
 	document.documentElement.classList.remove('scroll-locked');
 }
 
-function initAnchorLinks() {
+function bindAnchorLinks() {
 	document.addEventListener('click', (event) => {
 		if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
 			return;
@@ -61,6 +61,6 @@ function initAnchorLinks() {
 	});
 }
 
-export function initSmoothScroll() {
-	initAnchorLinks();
+export function initAnchorLinks() {
+	bindAnchorLinks();
 }
