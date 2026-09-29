@@ -1,6 +1,5 @@
 ---
 import Button from '../ui/Button.astro';
-import Icon from '../ui/Icon.astro';
 import type { Project } from '../../data/content';
 
 interface Props {
@@ -10,16 +9,12 @@ interface Props {
 
 const { project, index } = Astro.props;
 
-const primaryHref = project.liveUrl ?? project.repoUrl;
+const primaryHref = project.liveUrl;
 const address = project.liveUrl
 	? new URL(project.liveUrl).host + new URL(project.liveUrl).pathname.replace(/\/$/, '')
-	: project.repoUrl
-		? project.repoUrl.replace('https://', '')
-		: project.title;
+	: project.title;
 // Starts with the address shown in the window bar, so the spoken name matches the visible text.
-const mediaLabel = project.liveUrl
-	? `${address}: open ${project.title} (opens in a new tab)`
-	: `${address}: view ${project.title} on GitHub (opens in a new tab)`;
+const mediaLabel = `${address}: open ${project.title} (opens in a new tab)`;
 const smallImage = project.image?.replace(/\.webp$/, '-720.webp');
 ---
 
@@ -102,19 +97,6 @@ const smallImage = project.image?.replace(/\.webp$/, '-720.webp');
 						{project.liveLabel ?? 'Visit the site'}
 					</Button>
 				)
-			}
-			{
-				project.repoUrl &&
-					(project.liveUrl ? (
-						<a href={project.repoUrl} target="_blank" rel="noopener noreferrer" class="tlink" aria-label={`View code: ${project.title} on GitHub (opens in a new tab)`}>
-							<Icon name="github" size={16} />
-							<span>View code</span>
-						</a>
-					) : (
-						<Button href={project.repoUrl} external size="sm" icon="github" aria-label={`View code: ${project.title} on GitHub (opens in a new tab)`}>
-							View code
-						</Button>
-					))
 			}
 		</div>
 	</div>

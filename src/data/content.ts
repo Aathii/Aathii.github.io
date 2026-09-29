@@ -18,8 +18,6 @@ export interface Project {
 	/** Live site (opens in a new tab). */
 	liveUrl?: string;
 	liveLabel?: string;
-	/** Source code on GitHub. */
-	repoUrl?: string;
 	/**
 	 * Tall "scroll-through" screenshot under /public/projects. Its top matches the first screen and it
 	 * pans slowly inside the frame on hover. Without one, `illustration` is drawn instead.
@@ -57,7 +55,6 @@ export const projects: Project[] = [
 			"A Streamlit tool on the GleanTap CRM API: OpenAI drafts each lead's follow-up, then the tool logs the text, email or note and completes the routine follow-up task. It saves several hours of data entry a week and cut my daily workflow down to phone calls.",
 		role: 'Designer and developer',
 		tags: ['Python', 'Streamlit', 'OpenAI API', 'GleanTap API'],
-		repoUrl: 'https://github.com/Aathii/CRMAUTOGLEAN',
 		illustration: 'assistant',
 	},
 	{
@@ -70,7 +67,6 @@ export const projects: Project[] = [
 		tags: ['HTML', 'CSS', 'JavaScript'],
 		liveUrl: 'https://everseasonsco.ca',
 		liveLabel: 'Visit everseasonsco.ca',
-		repoUrl: 'https://github.com/Aathii/Everseasonz',
 		image: '/projects/everseasons-tall.webp',
 		imageAlt: 'EverSeasons Co homepage: a hand cleaning a window behind the brand mark and the headline "Home Maintenance".',
 	},
@@ -84,9 +80,21 @@ export const projects: Project[] = [
 		tags: ['Astro', 'Tailwind CSS', 'TypeScript'],
 		liveUrl: 'https://thecocoshack.ca',
 		liveLabel: 'Visit thecocoshack.ca',
-		repoUrl: 'https://github.com/Aathii/coco-shack-website',
 		image: '/projects/coco-tall.webp',
 		imageAlt: 'The Coco Shack homepage: a video of coconuts being cut, with the headline "Coconuts cut live. Cocktails served in the shell."',
+	},
+	{
+		slug: 'nishas-culinary',
+		title: "Nisha's Culinary",
+		kind: 'Concept demo · Client website',
+		summary:
+			'A website concept for a Scarborough kitchen serving North Indian takeout, desserts and custom cakes: the menu, cake enquiries and ordering details, designed mobile-first for customers ordering from their phones.',
+		role: 'Designer and developer',
+		tags: ['HTML', 'CSS', 'JavaScript'],
+		liveUrl: 'https://nishas-culinary-demo.vercel.app',
+		liveLabel: 'View the demo',
+		image: '/projects/nishas-tall.webp',
+		imageAlt: "Nisha's Culinary homepage concept: North Indian takeout, desserts and custom cakes in Scarborough.",
 	},
 	{
 		slug: 'juicing4life',
@@ -96,7 +104,8 @@ export const projects: Project[] = [
 			'A warm, video-led site for a family-run cane juice booth in Scarborough: the menu, the family story and visit details, with call-ahead ordering up front.',
 		role: 'Designer and developer',
 		tags: ['React', 'Vite', 'Tailwind CSS', 'TypeScript'],
-		repoUrl: 'https://github.com/Aathii/juicing4life',
+		liveUrl: 'https://aathii.github.io/juicing4life/',
+		liveLabel: 'Visit the site',
 		image: '/projects/juicing4life-tall.webp',
 		imageAlt: 'Juicing4Life homepage: a video of fresh coconut and sugar cane behind a card reading "Juicing4Life" with opening hours and location.',
 	},

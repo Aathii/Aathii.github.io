@@ -39,7 +39,6 @@ export const site = {
   resumeUrl: '/Aathii_Rakurakavan_Resume.pdf',
 
   socials: [
-    { label: 'GitHub', url: 'https://github.com/Aathii' },
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/aathii-r-51760b1a5' },
     { label: 'X (Twitter)', url: 'https://x.com/aathiiraku' },
   ] as { label: string; url: string }[],
